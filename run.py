@@ -11,10 +11,11 @@ class CreateBoard:
         self.board_size = 0
         self.bomb_num = 0
         self.get_difficulty_level()
+        self.clickable_board = []
         self.board = self.create_new_board()
         self.insert_values()
         self.display_board()
-        self.clickable_board() = []
+        
 
     def get_difficulty_level(self):
         """
@@ -30,6 +31,8 @@ class CreateBoard:
         Place bombs, represented by character "*", at random coordinates in the board 
         """
         board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
+        self.clickable_board = [['x' for a in range(self.board_size)] for b in range(self.board_size)]
+
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
@@ -77,7 +80,7 @@ class CreateBoard:
         #stack board arrays
         for r in range(self.board_size):
             #print(self.board[r])
-            line_to_print = ' '.join(self.board[r]) + ' '
+            line_to_print = ' '.join(self.board[r]) + '     ' + ' '.join(self.clickable_board[r])
             print(line_to_print) 
            
 
