@@ -24,7 +24,7 @@ class CreateBoard:
         while bomb_counter < self.bomb_num:
             # Generate two random coordinates considering the size of the board
             x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
-            # If the cell of the board has already a bomb, continue (skip and go at the top of the while loop)
+            # If the cell has already a bomb, skip and go to the top of the while loop
             if board[x][y] == "*":
                 continue
             # If the cell has no bomb, place it
@@ -34,9 +34,11 @@ class CreateBoard:
         print(board)
 
 
+    
+
+
         
 
-
-CreateBoard(10, 10)
+CreateBoard(20, 20)
 
 
