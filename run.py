@@ -11,19 +11,19 @@ class CreateBoard:
         self.board_size = 0
         self.bomb_num = 0
         self.get_difficulty_level()
-        self.clickable_board = []
+        self.ui_board = []
         self.board = self.create_new_board()
         self.insert_values()
-        self.display_board()
+        self.display_board(self.board)
+        self.show(5,5)
         
-
     def get_difficulty_level(self):
         """
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 20
-        self.bomb_num = 20
+        self.board_size = 10
+        self.bomb_num = 10
 
     def create_new_board(self):
         """
@@ -31,8 +31,7 @@ class CreateBoard:
         Place bombs, represented by character "*", at random coordinates in the board 
         """
         board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
-        self.clickable_board = [['x' for a in range(self.board_size)] for b in range(self.board_size)]
-
+        self.ui_board = [['x' for a in range(self.board_size)] for b in range(self.board_size)]
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
@@ -45,8 +44,7 @@ class CreateBoard:
             board[x][y] = "*"
             bomb_counter += 1
         return board
-        
-    
+  
     def insert_values(self):
         """
         for each cell that has no bomb, assign a value representing
@@ -58,11 +56,9 @@ class CreateBoard:
                     continue
                 self.board[x][y] = self.get_near_bombs_num(x,y)
         
-        
-
     def get_near_bombs_num(self,x,y):
         """
-        #iterate through the 8 adiacent cells 
+        iterate through the 8 adiacent cells 
         """        
         near_bombs_num = 0
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
@@ -73,22 +69,44 @@ class CreateBoard:
                     near_bombs_num += 1
         return str(near_bombs_num)
 
-    def display_board(self):
+    def display_board(self, board_to_show):
         """
         display board with format
         """
+        self.board_to_show = board_to_show
         #stack board arrays
         for r in range(self.board_size):
             #print(self.board[r])
-            line_to_print = ' '.join(self.board[r]) + '     ' + ' '.join(self.clickable_board[r])
+            line_to_print = ' '.join(self.board_to_show[r])
             print(line_to_print) 
-           
+
+    def show(self, x, y):
+        """
+        check the cell chosen by the user:
+        """
+        #If there is a bomb, game over
+        if self.board[x][y] == "*":
+            print("Game Over")
+        #If there is one or more adjacent bomb, show only that cell
+        #in the displayed board 
+        elif int(self.board[x][y]) > 0:
+            self.ui_board[x][y] = self.board[x][y]
+            self.display_board(self.ui_board)
+        #If there is no adjacent bomb, enlarge the shown area until
+        #you find a cell with adjacent bombs 
+        elif int(self.board[x][y]) == 0:
+            print(int(self.board[x][y]))
+            None
+
+            
 
 def main():
     #insert if you want to play or not
     game = CreateBoard()
-
-
+    
 
 main()
+
+
+
 
