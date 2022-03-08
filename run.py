@@ -15,7 +15,10 @@ class CreateBoard:
         self.board = self.create_new_board()
         self.insert_values()
         self.display_board(self.board)
+        self.shown = set()
         self.show(5,5)
+        self.display_board(self.ui_board)
+        
         
     def get_difficulty_level(self):
         """
@@ -23,7 +26,7 @@ class CreateBoard:
         the difficulty level chosen by the user
         """
         self.board_size = 10
-        self.bomb_num = 10
+        self.bomb_num = 15
 
     def create_new_board(self):
         """
@@ -84,21 +87,26 @@ class CreateBoard:
         """
         check the cell chosen by the user:
         """
+        self.shown.add((x,y))
         #If there is a bomb, game over
         if self.board[x][y] == "*":
             print("Game Over")
         #If there is one or more adjacent bomb, show only that cell
         #in the displayed board 
         elif int(self.board[x][y]) > 0:
-            self.ui_board[x][y] = self.board[x][y]
-            self.display_board(self.ui_board)
+            self.ui_board[x][y] = self.board[x][y]   
         #If there is no adjacent bomb, enlarge the shown area until
         #you find a cell with adjacent bombs 
         elif int(self.board[x][y]) == 0:
-            print(int(self.board[x][y]))
-            None
-
-            
+            self.ui_board[x][y] = "-"
+            for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+                for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
+                    if (r,c) in self.shown:
+                        continue
+                    self.show(r, c)
+        
+        
+                       
 
 def main():
     #insert if you want to play or not
