@@ -14,10 +14,10 @@ class CreateBoard:
         self.ui_board = []
         self.board = self.create_new_board()
         self.insert_values()
-        self.display_board(self.board)
+        #self.display_board(self.board)
         self.shown = set()
-        self.show(5,5)
-        self.display_board(self.ui_board)
+        #self.show(5,5)
+        #self.display_board(self.ui_board)
         
         
     def get_difficulty_level(self):
@@ -104,16 +104,29 @@ class CreateBoard:
                     if (r,c) in self.shown:
                         continue
                     self.show(r, c)
-        
-        
-                       
 
+def run_game():
+    board = CreateBoard()
+    while len(board.shown) < board.board_size ** 2 - board.bomb_num:
+        board.display_board(board.ui_board)
+        x = int(input("input the row number of the selected cell: ")) - 1
+        if x < 0 or x > board.board_size + 1:
+            print("The row does not exist")
+            continue
+        y = int(input("input the column number of the selected cell: ")) - 1
+        if y < 0 or y > board.board_size + 1:
+            print("The column does not exist")
+            continue
+        board.show(x,y)
+
+"""
 def main():
     #insert if you want to play or not
     game = CreateBoard()
+"""
     
-
-main()
+#main()
+run_game()
 
 
 
