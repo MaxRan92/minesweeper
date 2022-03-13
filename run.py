@@ -16,6 +16,7 @@ class CreateBoard:
         self.insert_values()
         #self.display_board(self.board)
         self.shown = set()
+        self.gameover = False
         #self.show(5,5)
         #self.display_board(self.ui_board)
         
@@ -91,7 +92,9 @@ class CreateBoard:
             self.shown.add((x,y))
             #If there is a bomb, game over
             if self.board[x][y] == "*":
-                print("Game Over")
+                self.ui_board[x][y] = self.board[x][y]
+                self.gameover = True
+                
             #If there is one or more adjacent bomb, show only that cell
             #in the displayed board 
             elif int(self.board[x][y]) > 0:
@@ -113,6 +116,18 @@ class CreateBoard:
             else: 
                 print("Cannot place a flag in an already shown flag!")
 
+class RestartGame:
+    """
+    If the user wins or lose, ask to restart
+    """
+    def restart_game():
+        restart = input("Do you want to play again? (y/n)\n")
+        if restart == "y":
+            run_game()
+        else:
+            print("Thank you for playing!")
+
+
 
 
 def run_game():
@@ -122,29 +137,34 @@ def run_game():
     board = CreateBoard()
     while len(board.shown) < board.board_size ** 2 - board.bomb_num:
         board.display_board(board.ui_board)
-        starter = input("Press Enter to dig \n Press F to place/remove a flag")
-        if starter == "F":
-            flag = True
-            x = int(input("input the row number of the selected cell: ")) - 1
-            if x < 0 or x > board.board_size + 1:
-                print("The row does not exist")
-                continue
-            y = int(input("input the column number of the selected cell: ")) - 1
-            if y < 0 or y > board.board_size + 1:
-                print("The column does not exist")
-                continue
-            board.show(x,y,flag)
-        else:
-            flag = False
-            x = int(input("input the row number of the selected cell: ")) - 1
-            if x < 0 or x > board.board_size + 1:
-                print("The row does not exist")
-                continue
-            y = int(input("input the column number of the selected cell: ")) - 1
-            if y < 0 or y > board.board_size + 1:
-                print("The column does not exist")
-                continue
-            board.show(x,y,flag)
+        if board.gameover == True:
+            print("Game Over!")
+            RestartGame.restart_game()
+            break
+        else:   
+            starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
+            if starter == "F":
+                flag = True
+                x = int(input("input the row number of the selected cell: ")) - 1
+                if x < 0 or x > board.board_size + 1:
+                    print("The row does not exist")
+                    continue
+                y = int(input("input the column number of the selected cell: ")) - 1
+                if y < 0 or y > board.board_size + 1:
+                    print("The column does not exist")
+                    continue
+                board.show(x,y,flag)
+            else:
+                flag = False
+                x = int(input("input the row number of the selected cell: ")) - 1
+                if x < 0 or x > board.board_size + 1:
+                    print("The row does not exist")
+                    continue
+                y = int(input("input the column number of the selected cell: ")) - 1
+                if y < 0 or y > board.board_size + 1:
+                    print("The column does not exist")
+                    continue
+                board.show(x,y,flag)
 
 """
 def main():
