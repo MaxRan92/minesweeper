@@ -124,7 +124,7 @@ class Game:
         if restart == "y":
             run_game()
         else:
-            print("Thank you for playing!")
+            print(f"Thank you for playing {username}!")
 
 
 
@@ -133,6 +133,9 @@ def run_game():
     Runs game
     """
     board = Game()
+    global username
+    print("Hello! What is your name?")
+    username = input().strip()
     while len(board.shown) < board.board_size ** 2 - board.bomb_num:
         board.display_board(board.ui_board)
         if board.gameover == True:
