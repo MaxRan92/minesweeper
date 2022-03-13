@@ -1,6 +1,6 @@
 import random
 
-class CreateBoard:
+class Game:
     """
     Create the gaming board
     """
@@ -132,7 +132,7 @@ def run_game():
     """
     Runs game
     """
-    board = CreateBoard()
+    board = Game()
     while len(board.shown) < board.board_size ** 2 - board.bomb_num:
         board.display_board(board.ui_board)
         if board.gameover == True:
@@ -167,7 +167,7 @@ def run_game():
 """
 def main():
     #insert if you want to play or not
-    game = CreateBoard()
+    game = Game()
 """
     
 #main()
