@@ -1,4 +1,7 @@
+import colorama
+from colorama import Fore
 import random
+
 
 class Game:
     """
@@ -116,19 +119,20 @@ class Game:
             else: 
                 print("Cannot place a flag in an already shown flag!")
     
+
     def restart_game(self):
         """
         If the user wins or loses, ask to restart
         """
         restart = input("Do you want to play again) (y/n)\n")
         if restart == "y":
-            run_game()
+            main()
         else:
             print(f"Thank you for playing {username}!")
 
 
 
-def run_game():
+def main():
     """
     Runs game
     """
@@ -136,36 +140,46 @@ def run_game():
     global username
     print("Hello! What is your name?")
     username = input().strip()
-    while len(board.shown) < board.board_size ** 2 - board.bomb_num:
-        board.display_board(board.ui_board)
+    print("Hi " + Fore.GREEN + f"{username}!")
+    while True:
+        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
+        if user_selection in ["play", "p", "yes", "y"]:
+            while len(board.shown) < board.board_size ** 2 - board.bomb_num:
+                board.display_board(board.ui_board)
+                if board.gameover == True:
+                    print("Game Over!")
+                    board.restart_game()
+                    break
+                else:   
+                    starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
+                    if starter == "F":
+                        flag = True
+                        x = int(input("input the row number of the selected cell: ")) - 1
+                        if x < 0 or x > board.board_size + 1:
+                            print("The row does not exist")
+                            continue
+                        y = int(input("input the column number of the selected cell: ")) - 1
+                        if y < 0 or y > board.board_size + 1:
+                            print("The column does not exist")
+                            continue
+                        board.show(x,y,flag)
+                    else:
+                        flag = False
+                        x = int(input("input the row number of the selected cell: ")) - 1
+                        if x < 0 or x > board.board_size + 1:
+                            print("The row does not exist")
+                            continue
+                        y = int(input("input the column number of the selected cell: ")) - 1
+                        if y < 0 or y > board.board_size + 1:
+                            print("The column does not exist")
+                            continue
+                        board.show(x,y,flag)
+        elif user_selection in ["tutorial", "t"]:
+            print("Tutorial to be inserted")
+        else:
+            print(Fore.RED + f"Hey {username}, your input is not recognized, please try again!")
         if board.gameover == True:
-            print("Game Over!")
-            board.restart_game()
             break
-        else:   
-            starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
-            if starter == "F":
-                flag = True
-                x = int(input("input the row number of the selected cell: ")) - 1
-                if x < 0 or x > board.board_size + 1:
-                    print("The row does not exist")
-                    continue
-                y = int(input("input the column number of the selected cell: ")) - 1
-                if y < 0 or y > board.board_size + 1:
-                    print("The column does not exist")
-                    continue
-                board.show(x,y,flag)
-            else:
-                flag = False
-                x = int(input("input the row number of the selected cell: ")) - 1
-                if x < 0 or x > board.board_size + 1:
-                    print("The row does not exist")
-                    continue
-                y = int(input("input the column number of the selected cell: ")) - 1
-                if y < 0 or y > board.board_size + 1:
-                    print("The column does not exist")
-                    continue
-                board.show(x,y,flag)
 
 """
 def main():
@@ -174,7 +188,7 @@ def main():
 """
     
 #main()
-run_game()
+main()
 
 
 
