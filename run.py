@@ -83,41 +83,68 @@ class CreateBoard:
             line_to_print = ' '.join(self.board_to_show[r])
             print(line_to_print) 
 
-    def show(self, x, y):
+    def show(self, x, y, flag):
         """
         check the cell chosen by the user:
         """
-        self.shown.add((x,y))
-        #If there is a bomb, game over
-        if self.board[x][y] == "*":
-            print("Game Over")
-        #If there is one or more adjacent bomb, show only that cell
-        #in the displayed board 
-        elif int(self.board[x][y]) > 0:
-            self.ui_board[x][y] = self.board[x][y]   
-        #If there is no adjacent bomb, enlarge the shown area until
-        #you find a cell with adjacent bombs 
-        elif int(self.board[x][y]) == 0:
-            self.ui_board[x][y] = "-"
-            for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-                for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
-                    if (r,c) in self.shown:
-                        continue
-                    self.show(r, c)
+        if flag == False:
+            self.shown.add((x,y))
+            #If there is a bomb, game over
+            if self.board[x][y] == "*":
+                print("Game Over")
+            #If there is one or more adjacent bomb, show only that cell
+            #in the displayed board 
+            elif int(self.board[x][y]) > 0:
+                self.ui_board[x][y] = self.board[x][y]   
+            #If there is no adjacent bomb, enlarge the shown area until
+            #you find a cell with adjacent bombs 
+            elif int(self.board[x][y]) == 0:
+                self.ui_board[x][y] = "-"
+                for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+                    for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
+                        if (r,c) in self.shown:
+                            continue
+                        self.show(r, c,flag)
+        else:
+            if self.ui_board[x][y] == "x":
+                self.ui_board[x][y] = "F"
+            elif self.ui_board[x][y] == "F":
+                self.ui_board[x][y] = "x"
+            else: 
+                print("Cannot place a flag in an already shown flag!")
+
+
 
 def run_game():
+    """
+    Runs game
+    """
     board = CreateBoard()
     while len(board.shown) < board.board_size ** 2 - board.bomb_num:
         board.display_board(board.ui_board)
-        x = int(input("input the row number of the selected cell: ")) - 1
-        if x < 0 or x > board.board_size + 1:
-            print("The row does not exist")
-            continue
-        y = int(input("input the column number of the selected cell: ")) - 1
-        if y < 0 or y > board.board_size + 1:
-            print("The column does not exist")
-            continue
-        board.show(x,y)
+        starter = input("Press Enter to dig \n Press F to place/remove a flag")
+        if starter == "F":
+            flag = True
+            x = int(input("input the row number of the selected cell: ")) - 1
+            if x < 0 or x > board.board_size + 1:
+                print("The row does not exist")
+                continue
+            y = int(input("input the column number of the selected cell: ")) - 1
+            if y < 0 or y > board.board_size + 1:
+                print("The column does not exist")
+                continue
+            board.show(x,y,flag)
+        else:
+            flag = False
+            x = int(input("input the row number of the selected cell: ")) - 1
+            if x < 0 or x > board.board_size + 1:
+                print("The row does not exist")
+                continue
+            y = int(input("input the column number of the selected cell: ")) - 1
+            if y < 0 or y > board.board_size + 1:
+                print("The column does not exist")
+                continue
+            board.show(x,y,flag)
 
 """
 def main():
