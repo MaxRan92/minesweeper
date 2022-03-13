@@ -158,7 +158,8 @@ class Game:
         """
         restart = input("Do you want to play again) (y/n)\n")
         if restart == "y":
-            main()
+            self.__init__()
+            self.run_game()
         else:
             print(f"Thank you for playing {username}!")
 
