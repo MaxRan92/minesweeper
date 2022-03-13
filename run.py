@@ -115,18 +115,16 @@ class CreateBoard:
                 self.ui_board[x][y] = "x"
             else: 
                 print("Cannot place a flag in an already shown flag!")
-
-class RestartGame:
-    """
-    If the user wins or lose, ask to restart
-    """
-    def restart_game():
-        restart = input("Do you want to play again? (y/n)\n")
+    
+    def restart_game(self):
+        """
+        If the user wins or loses, ask to restart
+        """
+        restart = input("Do you want to play again) (y/n)\n")
         if restart == "y":
             run_game()
         else:
             print("Thank you for playing!")
-
 
 
 
@@ -139,7 +137,7 @@ def run_game():
         board.display_board(board.ui_board)
         if board.gameover == True:
             print("Game Over!")
-            RestartGame.restart_game()
+            board.restart_game()
             break
         else:   
             starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
