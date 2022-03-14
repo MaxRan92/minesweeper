@@ -1,10 +1,10 @@
 import colorama
 from colorama import Fore
 import random
-from .mixins import ClearConsole
+from mixins import ClearConsole
 
 
-class Game:
+class Game(ClearConsole):
     """
     Create the gaming board
     """
@@ -153,7 +153,8 @@ class Game:
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
-                        self.show(x,y,flag)
+                    self.clear_display()
+                    self.show(x,y,flag)
 
 
     def restart_game(self):

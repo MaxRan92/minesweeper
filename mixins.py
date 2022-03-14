@@ -1,3 +1,5 @@
+import os
+
 class ClearConsole():
     """
     Function that clears the console
