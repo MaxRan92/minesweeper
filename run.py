@@ -163,6 +163,7 @@ class Game(ClearConsole):
         """
         restart = input("Do you want to play again) (y/n)\n")
         if restart == "y":
+            self.clear_display()
             self.__init__()
             self.run_game()
         else:
