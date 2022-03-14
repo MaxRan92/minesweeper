@@ -1,6 +1,7 @@
 import colorama
 from colorama import Fore
 import random
+from .mixins import ClearConsole
 
 
 class Game:
@@ -120,35 +121,38 @@ class Game:
                 print("Cannot place a flag in an already shown flag!")
     
     def run_game(self):
+        """
+        runs the game
+        """
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
-                self.display_board(self.ui_board)
-                if self.gameover == True:
-                    print("Game Over!")
-                    self.restart_game()
-                    break
-                else:   
-                    starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
-                    if starter == "F":
-                        flag = True
-                        x = int(input("input the row number of the selected cell: ")) - 1
-                        if x < 0 or x > self.board_size + 1:
-                            print("The row does not exist")
-                            continue
-                        y = int(input("input the column number of the selected cell: ")) - 1
-                        if y < 0 or y > self.board_size + 1:
-                            print("The column does not exist")
-                            continue
-                        self.show(x,y,flag)
-                    else:
-                        flag = False
-                        x = int(input("input the row number of the selected cell: ")) - 1
-                        if x < 0 or x > self.board_size + 1:
-                            print("The row does not exist")
-                            continue
-                        y = int(input("input the column number of the selected cell: ")) - 1
-                        if y < 0 or y > self.board_size + 1:
-                            print("The column does not exist")
-                            continue
+            self.display_board(self.ui_board)
+            if self.gameover == True:
+                print("Game Over!")
+                self.restart_game()
+                break
+            else:   
+                starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
+                if starter == "F":
+                    flag = True
+                    x = int(input("input the row number of the selected cell: ")) - 1
+                    if x < 0 or x > self.board_size + 1:
+                        print("The row does not exist")
+                        continue
+                    y = int(input("input the column number of the selected cell: ")) - 1
+                    if y < 0 or y > self.board_size + 1:
+                        print("The column does not exist")
+                        continue
+                    self.show(x,y,flag)
+                else:
+                    flag = False
+                    x = int(input("input the row number of the selected cell: ")) - 1
+                    if x < 0 or x > self.board_size + 1:
+                        print("The row does not exist")
+                        continue
+                    y = int(input("input the column number of the selected cell: ")) - 1
+                    if y < 0 or y > self.board_size + 1:
+                        print("The column does not exist")
+                        continue
                         self.show(x,y,flag)
 
 
