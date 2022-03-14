@@ -36,20 +36,20 @@ class Game(ClearConsole):
     def create_new_board(self):
         """
         Create board arrays with none values
-        Place bombs, represented by character "*", at random coordinates in the board 
+        Place bombs, represented by character *, at random coordinates in the board 
         """
         board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
-        self.ui_board = [['x' for a in range(self.board_size)] for b in range(self.board_size)]
+        self.ui_board = [["\U0001F532" for a in range(self.board_size)] for b in range(self.board_size)]
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
             # Generate two random coordinates considering the size of the board
             x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
             # If the cell has already a bomb, skip and go to the top of the while loop
-            if board[x][y] == "*":
+            if board[x][y] == "\U0001F4A5":
                 continue
             # If the cell has no bomb, place it
-            board[x][y] = "*"
+            board[x][y] = "\U0001F4A5"
             bomb_counter += 1
         return board
   
@@ -60,7 +60,7 @@ class Game(ClearConsole):
         """
         for x in range(self.board_size):
             for y in range(self.board_size):
-                if self.board[x][y] == "*":
+                if self.board[x][y] == '\U0001F4A5':
                     continue
                 self.board[x][y] = self.get_near_bombs_num(x,y)
         
@@ -73,7 +73,7 @@ class Game(ClearConsole):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                 if r == x and c == y:
                     continue
-                if self.board[r][c] == '*':
+                if self.board[r][c] == '\U0001F4A5':
                     near_bombs_num += 1
         return str(near_bombs_num)
 
@@ -95,28 +95,28 @@ class Game(ClearConsole):
         if flag == False:
             self.shown.add((x,y))
             #If there is a bomb, game over
-            if self.board[x][y] == "*":
+            if self.board[x][y] == "\U0001F4A5":
                 self.ui_board[x][y] = self.board[x][y]
                 self.gameover = True
                 
-            #If there is one or more adjacent bomb, show only that cell
-            #in the displayed board 
+            # If there is one or more adjacent bomb, show only that cell
+            # in the displayed board
             elif int(self.board[x][y]) > 0:
-                self.ui_board[x][y] = self.board[x][y]   
-            #If there is no adjacent bomb, enlarge the shown area until
-            #you find a cell with adjacent bombs 
+                self.ui_board[x][y] = self.board[x][y]
+            # If there is no adjacent bomb, enlarge the shown area until
+            # you find a cell with adjacent bombs
             elif int(self.board[x][y]) == 0:
-                self.ui_board[x][y] = "-"
+                self.ui_board[x][y] = "\U0001F573"
                 for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
                     for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
-                        if (r,c) in self.shown:
+                        if (r, c) in self.shown:
                             continue
-                        self.show(r, c,flag)
+                        self.show(r, c, flag)
         else:
-            if self.ui_board[x][y] == "x":
-                self.ui_board[x][y] = "F"
-            elif self.ui_board[x][y] == "F":
-                self.ui_board[x][y] = "x"
+            if self.ui_board[x][y] == "\U0001F532": # ascii white square
+                self.ui_board[x][y] = "\U0001F6A9" # ascii Flag
+            elif self.ui_board[x][y] == "\U0001F6A9": # ascii Flag
+                self.ui_board[x][y] = "\U0001F532" # ascii white square
             else: 
                 print("Cannot place a flag in an already shown spot!")
     
