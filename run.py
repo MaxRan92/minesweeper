@@ -118,7 +118,7 @@ class Game(ClearConsole):
             elif self.ui_board[x][y] == "F":
                 self.ui_board[x][y] = "x"
             else: 
-                print("Cannot place a flag in an already shown flag!")
+                print("Cannot place a flag in an already shown spot!")
     
     def run_game(self):
         """
@@ -131,7 +131,7 @@ class Game(ClearConsole):
                 self.restart_game()
                 break
             else:   
-                starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag")
+                starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag\n")
                 if starter == "F":
                     flag = True
                     x = int(input("input the row number of the selected cell: ")) - 1
@@ -142,6 +142,7 @@ class Game(ClearConsole):
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
+                    self.clear_display()
                     self.show(x,y,flag)
                 else:
                     flag = False
@@ -175,7 +176,7 @@ def main():
     """
     Runs game
     """
-    board = Game()
+    game = Game()
     global username
     print("Hello! What is your name?")
     username = input().strip()
@@ -183,12 +184,13 @@ def main():
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
         if user_selection in ["play", "p", "yes", "y"]:
-            board.run_game()
+            game.clear_display()
+            game.run_game()
         elif user_selection in ["tutorial", "t"]:
             print("Tutorial to be inserted")
         else:
             print(Fore.RED + f"Hey {username}, your input is not recognized, please try again!")
-        if board.gameover == True:
+        if game.gameover == True:
             break
 
 """
