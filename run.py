@@ -127,18 +127,20 @@ class Game(ClearConsole):
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
             if self.gameover == True:
-                print("Game Over!")
+                print("\nGame Over!")
                 self.restart_game()
                 break
             else:   
-                starter = input("-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+                starter = input("\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
                 if starter == "F":
                     flag = True
-                    x = int(input("input the row number of the selected cell: ")) - 1
+                    self.clear_display()
+                    self.display_board(self.ui_board)
+                    x = int(input("\ninsert the row number of the selected cell: ")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("input the column number of the selected cell: ")) - 1
+                    y = int(input("insert the column number of the selected cell: ")) - 1
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
@@ -146,11 +148,13 @@ class Game(ClearConsole):
                     self.show(x,y,flag)
                 else:
                     flag = False
-                    x = int(input("input the row number of the selected cell: ")) - 1
+                    self.clear_display()
+                    self.display_board(self.ui_board)
+                    x = int(input("\ninsert the row number of the selected cell: ")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("input the column number of the selected cell: ")) - 1
+                    y = int(input("insert the column number of the selected cell: ")) - 1
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
