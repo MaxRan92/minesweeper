@@ -82,9 +82,9 @@ class Game(ClearConsole):
         display board with format
         """
         self.board_to_show = board_to_show
-        #stack board arrays
+        # stack board arrays
         for r in range(self.board_size):
-            #print(self.board[r])
+            # print(self.board[r])
             line_to_print = ' '.join(self.board_to_show[r])
             print(line_to_print) 
 
@@ -102,11 +102,11 @@ class Game(ClearConsole):
             # If there is one or more adjacent bomb, show only that cell
             # in the displayed board
             elif int(self.board[x][y]) > 0:
-                self.ui_board[x][y] = self.board[x][y]
+                self.ui_board[x][y] = " " + self.board[x][y]
             # If there is no adjacent bomb, enlarge the shown area until
             # you find a cell with adjacent bombs
             elif int(self.board[x][y]) == 0:
-                self.ui_board[x][y] = "\U0001F573"
+                self.ui_board[x][y] = "\U0001F340"
                 for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
                     for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                         if (r, c) in self.shown:
