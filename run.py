@@ -21,6 +21,7 @@ class Game(ClearConsole):
         #self.display_board(self.board)
         self.shown = set()
         self.gameover = False
+        self.flag_alert = False
         #self.show(5,5)
         #self.display_board(self.ui_board)
         
@@ -94,11 +95,10 @@ class Game(ClearConsole):
         """
         if flag == False:
             self.shown.add((x,y))
-            #If there is a bomb, game over
+            # If there is a bomb, game over
             if self.board[x][y] == "\U0001F4A5":
                 self.ui_board[x][y] = self.board[x][y]
                 self.gameover = True
-                
             # If there is one or more adjacent bomb, show only that cell
             # in the displayed board
             elif int(self.board[x][y]) > 0:
@@ -125,15 +125,17 @@ class Game(ClearConsole):
         runs the game
         """
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
-            self.display_board(self.ui_board)
+            if self.flag_alert == False:
+                self.display_board(self.ui_board)
             if self.gameover == True:
                 print("\nGame Over!")
                 self.restart_game()
                 break
             else:   
-                starter = input("\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+                starter = input(Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
                 if starter == "F":
                     flag = True
+                    self.flag_alert = False
                     self.clear_display()
                     self.display_board(self.ui_board)
                     x = int(input("\ninsert the row number of the selected cell: ")) - 1
@@ -158,8 +160,14 @@ class Game(ClearConsole):
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
-                    self.clear_display()
-                    self.show(x,y,flag)
+                    # If there is a flag, print alert
+                    if self.ui_board[x][y] == "\U0001F6A9":
+                        print(Fore.RED + "\nPlease remove the flag before digging")
+                        self.flag_alert = True 
+                    else:
+                        self.flag_alert = False
+                        self.clear_display()
+                        self.show(x,y,flag)
 
 
     def restart_game(self):
