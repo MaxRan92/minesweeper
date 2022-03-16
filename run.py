@@ -16,7 +16,7 @@ class Game(ClearConsole):
         self.bomb_num = 0
         self.get_difficulty_level()
         self.ui_board = []
-        self.x_coordinates = [] 
+        self.x_coordinates = []
         self.board = self.create_new_board()
         self.insert_values()
         #self.display_board(self.board)
@@ -32,7 +32,7 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 15
+        self.board_size = 10
         self.bomb_num = 15
 
     def create_new_board(self):
@@ -86,21 +86,28 @@ class Game(ClearConsole):
         """
         self.board_to_show = board_to_show
         self.x_coordinates = []
+        self.x_separation = []
         for a in range(self.board_size):
             if a < 9:
                 self.x_coordinates.append('  ' + str(a+1))
             else:
                 self.x_coordinates.append(' ' + str(a+1))
+            self.x_separation.append('---')
         self.x_coordinates = ' '.join(self.x_coordinates)
+        self.x_coordinates = '    ' + self.x_coordinates
+        self.x_separation = ' '.join(self.x_separation)
+        self.x_separation = '     ' + self.x_separation
         print(self.x_coordinates)
+        print(self.x_separation)
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"{str(r+1) + '  | ' + '  '.join(self.board_to_show[r])}"
+                line_to_print = f"{str(r+1) + '  | ' + '  '.join(self.board_to_show[r]) + ' |  ' + str(r+1)}"
             else:
-                line_to_print = f"{str(r+1) + ' | ' + '  '.join(self.board_to_show[r])}"
+                line_to_print = f"{str(r+1) + ' | ' + '  '.join(self.board_to_show[r]) + ' |  ' + str(r+1)}"
             print(line_to_print)
-
+        print(self.x_separation)
+        print(self.x_coordinates)
 
     def show(self, x, y, flag):
         """
