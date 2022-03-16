@@ -166,6 +166,7 @@ class Game(ClearConsole):
                         continue
                     y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
                     if y < 0 or y > self.board_size + 1:
+                        self.clear_display()
                         print("The column does not exist")
                         continue
                     self.clear_display()
@@ -196,7 +197,6 @@ class Game(ClearConsole):
                     self.victory = True
                     self.restart_game()        
 
-
     def restart_game(self):
         """
         If the user wins or loses, ask to restart
@@ -209,18 +209,19 @@ class Game(ClearConsole):
         else:
             print(f"Thank you for playing {username}!")
 
-
 def main():
     """
     Runs game
     """
     game = Game()
     global username
+    # ask to enter a username until it is done
     print("Hello! What is your name?")
     username = input().strip()
     while len(username) == 0:
-        print("It looks like you haven't typed anything, please insert your name!")
+        print("It looks like you haven't typed anything, please enter your name!")
         username = input().strip()
+    game.clear_display()
     print("\nHi " + Fore.GREEN + f"{username}!")
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
@@ -230,7 +231,8 @@ def main():
         elif user_selection in ["tutorial", "t"]:
             print("Tutorial to be inserted")
         else:
-            print(Fore.RED + f"Hey {username}, your input is not recognized, please try again!")
+            game.clear_display()
+            print(Fore.RED + f"Hey {username}, your input is not recognized! \n")
         if game.gameover == True or game.victory == True:
             break
 
