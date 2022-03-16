@@ -160,11 +160,11 @@ class Game(ClearConsole):
                     self.clear_display()
                     self.display_board(self.ui_board)
                     print("\nLet's place a flag! \U0001F6A9")
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
+                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
+                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
                     if y < 0 or y > self.board_size + 1:
                         self.clear_display()
                         print("The column does not exist")
@@ -176,11 +176,11 @@ class Game(ClearConsole):
                     self.clear_display()
                     self.display_board(self.ui_board)
                     print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
+                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
+                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
