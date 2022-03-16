@@ -103,9 +103,9 @@ class Game(ClearConsole):
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '  '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
             else:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '  '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
             print(line_to_print)
         print(self.x_separation)
         print(self.x_coordinates)
