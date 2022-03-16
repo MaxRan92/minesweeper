@@ -123,7 +123,7 @@ class Game(ClearConsole):
             # If there is one or more adjacent bomb, show only that cell
             # in the displayed board
             elif int(self.board[x][y]) > 0:
-                self.ui_board[x][y] = " " + self.board[x][y]
+                self.ui_board[x][y] = self.board[x][y]
             # If there is no adjacent bomb, enlarge the shown area until
             # you find a cell with adjacent bombs
             elif int(self.board[x][y]) == 0:
