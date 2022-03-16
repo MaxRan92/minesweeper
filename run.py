@@ -33,8 +33,8 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 5
-        self.bomb_num = 1
+        self.board_size = 15
+        self.bomb_num = 10
 
     def create_new_board(self):
         """
