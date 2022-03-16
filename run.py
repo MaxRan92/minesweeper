@@ -89,9 +89,9 @@ class Game(ClearConsole):
         self.x_separation = []
         for a in range(self.board_size):
             if a < 9:
-                self.x_coordinates.append('  ' + str(a+1))
+                self.x_coordinates.append(f"{'  ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             else:
-                self.x_coordinates.append(' ' + str(a+1))
+                self.x_coordinates.append(f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             self.x_separation.append('---')
         self.x_coordinates = ' '.join(self.x_coordinates)
         self.x_coordinates = '    ' + self.x_coordinates
@@ -102,9 +102,9 @@ class Game(ClearConsole):
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"{str(r+1) + '  | ' + '  '.join(self.board_to_show[r]) + ' |  ' + str(r+1)}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '  '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
             else:
-                line_to_print = f"{str(r+1) + ' | ' + '  '.join(self.board_to_show[r]) + ' |  ' + str(r+1)}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '  '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
             print(line_to_print)
         print(self.x_separation)
         print(self.x_coordinates)
@@ -148,21 +148,22 @@ class Game(ClearConsole):
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
             if self.gameover == True:
-                print("\nGame Over!")
+                print("\nOuch, there was a mine!! \n" + Fore.RED + "Game Over!" + Fore.WHITE)
                 self.restart_game()
                 break
             else:   
                 starter = input(Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
-                if starter == "F":
+                if starter in ["F", "f", "flag"]:
                     flag = True
                     self.flag_alert = False
                     self.clear_display()
                     self.display_board(self.ui_board)
-                    x = int(input("\ninsert the row number of the selected cell: ")) - 1
+                    print("\nLet's place a flag! \U0001F6A9")
+                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("insert the column number of the selected cell: ")) - 1
+                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
@@ -172,11 +173,12 @@ class Game(ClearConsole):
                     flag = False
                     self.clear_display()
                     self.display_board(self.ui_board)
-                    x = int(input("\ninsert the row number of the selected cell: ")) - 1
+                    print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
+                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
                         continue
-                    y = int(input("insert the column number of the selected cell: ")) - 1
+                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell: ")) - 1
                     if y < 0 or y > self.board_size + 1:
                         print("The column does not exist")
                         continue
@@ -194,15 +196,13 @@ class Game(ClearConsole):
         """
         If the user wins or loses, ask to restart
         """
-        restart = input("Do you want to play again) (y/n)\n")
-        if restart == "y":
+        restart = input("\nDo you want to play again? (y/n)\n")
+        if restart in ["y", "yes"]:
             self.clear_display()
             self.__init__()
             self.run_game()
         else:
             print(f"Thank you for playing {username}!")
-
-
 
 def main():
     """
