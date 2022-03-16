@@ -33,8 +33,8 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 10
-        self.bomb_num = 15
+        self.board_size = 5
+        self.bomb_num = 1
 
     def create_new_board(self):
         """
@@ -193,7 +193,8 @@ class Game(ClearConsole):
                         self.clear_display()
                         self.show(x,y,flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
-                    print("Congratulations!!! You cleared the field!")
+                    self.display_board(self.ui_board)
+                    print("\nCONGRATULATIONS! You cleared the field!")
                     self.victory = True
                     self.restart_game()        
 
