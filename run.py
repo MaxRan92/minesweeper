@@ -22,6 +22,7 @@ class Game(ClearConsole):
         #self.display_board(self.board)
         self.shown = set()
         self.gameover = False
+        self.victory = False
         self.flag_alert = False
         #self.show(5,5)
         #self.display_board(self.ui_board)
@@ -32,8 +33,8 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 10
-        self.bomb_num = 15
+        self.board_size = 5
+        self.bomb_num = 1
 
     def create_new_board(self):
         """
@@ -190,6 +191,10 @@ class Game(ClearConsole):
                         self.flag_alert = False
                         self.clear_display()
                         self.show(x,y,flag)
+        if len(self.shown) == self.board_size ** 2 - self.bomb_num:
+                    print("Congratulations!!! You cleared the field!")
+                    self.victory = True
+                    self.restart_game()        
 
 
     def restart_game(self):
@@ -203,6 +208,7 @@ class Game(ClearConsole):
             self.run_game()
         else:
             print(f"Thank you for playing {username}!")
+
 
 def main():
     """
@@ -222,7 +228,7 @@ def main():
             print("Tutorial to be inserted")
         else:
             print(Fore.RED + f"Hey {username}, your input is not recognized, please try again!")
-        if game.gameover == True:
+        if game.gameover == True or game.victory == True:
             break
 
 """
