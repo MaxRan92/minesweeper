@@ -33,8 +33,8 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 5
-        self.bomb_num = 1
+        self.board_size = 10
+        self.bomb_num = 15
 
     def create_new_board(self):
         """
@@ -218,7 +218,10 @@ def main():
     global username
     print("Hello! What is your name?")
     username = input().strip()
-    print("Hi " + Fore.GREEN + f"{username}!")
+    while len(username) == 0:
+        print("It looks like you haven't typed anything, please insert your name!")
+        username = input().strip()
+    print("\nHi " + Fore.GREEN + f"{username}!")
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
         if user_selection in ["play", "p", "yes", "y"]:
@@ -237,7 +240,6 @@ def main():
     game = Game()
 """
     
-#main()
 main()
 
 
