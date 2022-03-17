@@ -1,4 +1,3 @@
-import colorama
 from colorama import Fore
 import random
 from mixins import ClearConsole
@@ -17,30 +16,29 @@ class Game(ClearConsole):
     """
     def __init__(self):
         """
-        Board size and bomb number variable assignment 
+        Setting variables 
         """
-        self.board_size = 0
-        self.bomb_num = 0
-        self.get_difficulty_level()
         self.ui_board = []
         self.x_coordinates = []
-        self.board = self.create_new_board()
-        self.insert_values()
         self.shown = set()
         self.gameover = False
         self.victory = False
         self.flag_alert = False
-
     
-
-        
-    def get_difficulty_level(self):
+    def get_difficulty_level(self,difficulty):
         """
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 10
-        self.bomb_num = 15
+        if difficulty in ["h", "hard"]:
+            self.board_size = 20
+            self.bomb_num = 60
+        elif difficulty in ["m", "medium"]:
+            self.board_size = 10
+            self.bomb_num = 15
+        elif difficulty in ["e", "easy"]:
+            self.board_size = 5
+            self.bomb_num = 4  
 
     def create_new_board(self):
         """
@@ -151,6 +149,9 @@ class Game(ClearConsole):
         """
         runs the game
         """
+        self.get_difficulty_level(difficulty)
+        self.board = self.create_new_board()
+        self.insert_values()
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
@@ -221,18 +222,24 @@ def main():
     Runs game
     """
     game = Game()
+    global difficulty
     global username
     # ask to enter a username until it is done
     print("Hello! What is your name?")
     username = input().strip()
     while len(username) == 0:
-        print("It looks like you haven't typed anything, please enter your name!")
+        print("It looks like you haven't typed anything, please enter your name!") # noqa
         username = input().strip()
     game.clear_display()
     print("\nHi " + Fore.GREEN + f"{username}!")
     while True:
-        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
+        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n") # noqa
         if user_selection in ["play", "p", "yes", "y"]:
+            game.clear_display()
+            difficulty = input("Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+            while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
+                difficulty = input(Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
+            game.get_difficulty_level(difficulty)
             game.clear_display()
             game.run_game()
         elif user_selection in ["tutorial", "t"]:
@@ -240,17 +247,7 @@ def main():
         else:
             game.clear_display()
             print(Fore.RED + f"Hey {username}, your input is not recognized! \n")
-        if game.gameover == True or game.victory == True:
+        if game.gameover or game.victory:
             break
 
-"""
-def main():
-    #insert if you want to play or not
-    game = Game()
-"""
-    
 main()
-
-
-
-
