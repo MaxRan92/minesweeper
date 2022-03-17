@@ -1,13 +1,17 @@
-import colorama
 from colorama import Fore
 import random
 from mixins import ClearConsole
+
+WHITE_BOX = "\U0001F532"
+BOMB = "\U0001F4A5"
+CLOVER = "\U0001F340"
 
 
 class Game(ClearConsole):
     """
     Create the gaming board
     """
+
     def __init__(self):
         """
         Board size and bomb number variable assignment 
@@ -19,15 +23,12 @@ class Game(ClearConsole):
         self.x_coordinates = []
         self.board = self.create_new_board()
         self.insert_values()
-        #self.display_board(self.board)
         self.shown = set()
         self.gameover = False
         self.victory = False
         self.flag_alert = False
-        #self.show(5,5)
-        #self.display_board(self.ui_board)
-        
-        
+        self.x_separation = ""
+
     def get_difficulty_level(self):
         """
         Assign board size and bomb num according to
@@ -41,22 +42,23 @@ class Game(ClearConsole):
         Create board arrays with none values
         Place bombs, represented by character *, at random coordinates in the board 
         """
-        board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
-        self.ui_board = [["\U0001F532" for a in range(self.board_size)] for b in range(self.board_size)]
- 
+        board = [[None for a in range(self.board_size)]
+                 for b in range(self.board_size)]
+        self.ui_board = [[WHITE_BOX for a in range(
+            self.board_size)] for b in range(self.board_size)]
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
             # Generate two random coordinates considering the size of the board
-            x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
+            x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)  # noqa
             # If the cell has already a bomb, skip and go to the top of the while loop
-            if board[x][y] == "\U0001F4A5":
+            if board[x][y] == BOMB:
                 continue
             # If the cell has no bomb, place it
-            board[x][y] = "\U0001F4A5"
+            board[x][y] = BOMB
             bomb_counter += 1
         return board
-  
+
     def insert_values(self):
         """
         for each cell that has no bomb, assign a value representing
@@ -64,20 +66,20 @@ class Game(ClearConsole):
         """
         for x in range(self.board_size):
             for y in range(self.board_size):
-                if self.board[x][y] == '\U0001F4A5':
+                if self.board[x][y] == BOMB:
                     continue
-                self.board[x][y] = self.get_near_bombs_num(x,y)
-        
-    def get_near_bombs_num(self,x,y):
+                self.board[x][y] = self.get_near_bombs_num(x, y)
+
+    def get_near_bombs_num(self, x, y):
         """
         iterate through the 8 adiacent cells 
-        """        
+        """
         near_bombs_num = 0
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                 if r == x and c == y:
                     continue
-                if self.board[r][c] == '\U0001F4A5':
+                if self.board[r][c] == BOMB:
                     near_bombs_num += 1
         return str(near_bombs_num)
 
@@ -90,9 +92,11 @@ class Game(ClearConsole):
         self.x_separation = []
         for a in range(self.board_size):
             if a < 9:
-                self.x_coordinates.append(f"{'  ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
+                self.x_coordinates.append(
+                    f"{'  ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             else:
-                self.x_coordinates.append(f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
+                self.x_coordinates.append(
+                    f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             self.x_separation.append('---')
         self.x_coordinates = ' '.join(self.x_coordinates)
         self.x_coordinates = '    ' + self.x_coordinates
@@ -114,10 +118,10 @@ class Game(ClearConsole):
         """
         check the cell chosen by the user:
         """
-        if flag == False:
-            self.shown.add((x,y))
+        if not flag:
+            self.shown.add((x, y))
             # If there is a bomb, game over
-            if self.board[x][y] == "\U0001F4A5":
+            if self.board[x][y] == BOMB:
                 self.ui_board[x][y] = self.board[x][y]
                 self.gameover = True
             # If there is one or more adjacent bomb, show only that cell
@@ -127,20 +131,20 @@ class Game(ClearConsole):
             # If there is no adjacent bomb, enlarge the shown area until
             # you find a cell with adjacent bombs
             elif int(self.board[x][y]) == 0:
-                self.ui_board[x][y] = "\U0001F340"
+                self.ui_board[x][y] = CLOVER
                 for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
                     for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                         if (r, c) in self.shown:
                             continue
                         self.show(r, c, flag)
         else:
-            if self.ui_board[x][y] == "\U0001F532": # ascii white square
-                self.ui_board[x][y] = "\U0001F6A9" # ascii Flag
-            elif self.ui_board[x][y] == "\U0001F6A9": # ascii Flag
-                self.ui_board[x][y] = "\U0001F532" # ascii white square
-            else: 
+            if self.ui_board[x][y] == "\U0001F532":  # ascii white square
+                self.ui_board[x][y] = "\U0001F6A9"  # ascii Flag
+            elif self.ui_board[x][y] == "\U0001F6A9":  # ascii Flag
+                self.ui_board[x][y] = "\U0001F532"  # ascii white square
+            else:
                 print("Cannot place a flag in an already shown spot!")
-    
+
     def run_game(self):
         """
         runs the game
@@ -149,54 +153,55 @@ class Game(ClearConsole):
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
             if self.gameover == True:
-                print("\nOuch, there was a mine!! \n" + Fore.RED + "Game Over!" + Fore.WHITE)
+                print("\nOuch, there was a mine!! \n" +
+                      Fore.RED + "Game Over!" + Fore.WHITE)
                 self.restart_game()
                 break
-            else:   
-                starter = input(Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
-                if starter in ["F", "f", "flag"]:
+            else:
+                starter = ""
+                flag = False
+                print("\n-  Press D to dig\n-  Press F to place/remove a flag\n")
+                while starter not in ["f", "flag", "d", "dig"]:
+                    starter = input(Fore.WHITE + "Please enter D or F").lower()
+                    print(f"starter is {starter}")
+                if "f" in starter.lower():
                     flag = True
                     self.flag_alert = False
-                    self.clear_display()
-                    self.display_board(self.ui_board)
-                    print("\nLet's place a flag! \U0001F6A9")
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if x < 0 or x > self.board_size + 1:
-                        print("The row does not exist")
-                        continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if y < 0 or y > self.board_size + 1:
-                        self.clear_display()
-                        print("The column does not exist")
-                        continue
-                    self.clear_display()
-                    self.show(x,y,flag)
-                else:
-                    flag = False
-                    self.clear_display()
-                    self.display_board(self.ui_board)
-                    print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if x < 0 or x > self.board_size + 1:
-                        print("The row does not exist")
-                        continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if y < 0 or y > self.board_size + 1:
-                        print("The column does not exist")
-                        continue
-                    # If there is a flag, print alert
-                    if self.ui_board[x][y] == "\U0001F6A9":
-                        print(Fore.RED + "\nPlease remove the flag before digging")
-                        self.flag_alert = True 
-                    else:
-                        self.flag_alert = False
-                        self.clear_display()
-                        self.show(x,y,flag)
+                self.get_coordinates(flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
-                    self.display_board(self.ui_board)
-                    print("\nCONGRATULATIONS! You cleared the field!")
-                    self.victory = True
-                    self.restart_game()        
+            self.display_board(self.ui_board)
+            print("\nCONGRATULATIONS! You cleared the field!")
+            self.victory = True
+            self.restart_game()
+
+    def get_coordinates(self,flag):
+        """
+        Docstring to be inserted
+        """
+        self.clear_display()
+        self.display_board(self.ui_board)
+        if flag:
+            print("\nLet's place a flag! \U0001F6A9")
+        else:
+            print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
+        x = 0
+        y = 0
+        print("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+        while not x > 0 and not x < self.board_size + 1:
+            x = int(input(f"it should be a number between 1 and {self.board_size + 1}\n")) - 1
+        print("insert the " + Fore.YELLOW + "COLUMN NUMBER" +
+                Fore.WHITE + " of the selected cell:\n")
+        while not y > 0 and not y < self.board_size + 1:
+            y = int(input(f"it should be a number between 1 and {self.board_size + 1}\n")) - 1    
+        if not flag:
+            # If there is a flag, print alert
+            if self.ui_board[x][y] == "\U0001F6A9":
+                print(Fore.RED + "\nPlease remove the flag before digging")
+                self.flag_alert = True
+            else:
+                self.flag_alert = False
+        self.clear_display()
+        self.show(x, y, flag)
 
     def restart_game(self):
         """
@@ -209,6 +214,7 @@ class Game(ClearConsole):
             self.run_game()
         else:
             print(f"Thank you for playing {username}!")
+
 
 def main():
     """
@@ -225,7 +231,8 @@ def main():
     game.clear_display()
     print("\nHi " + Fore.GREEN + f"{username}!")
     while True:
-        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
+        user_selection = input(
+            Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
         if user_selection in ["play", "p", "yes", "y"]:
             game.clear_display()
             game.run_game()
@@ -233,18 +240,16 @@ def main():
             print("Tutorial to be inserted")
         else:
             game.clear_display()
-            print(Fore.RED + f"Hey {username}, your input is not recognized! \n")
-        if game.gameover == True or game.victory == True:
+            print(
+                Fore.RED + f"Hey {username}, your input is not recognized! \n")
+        if game.gameover or game.victory:
             break
+
 
 """
 def main():
     #insert if you want to play or not
     game = Game()
 """
-    
+
 main()
-
-
-
-
