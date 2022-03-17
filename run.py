@@ -3,6 +3,13 @@ from colorama import Fore
 import random
 from mixins import ClearConsole
 
+"""
+Assign ASCII icons code to variables 
+"""
+BOMB = '\U0001F4A5'
+BLANK_SQUARE = '\U0001F532'
+CLOVER = '\U0001F340'
+FLAG = '\U0001F6A9'
 
 class Game(ClearConsole):
     """
@@ -19,14 +26,13 @@ class Game(ClearConsole):
         self.x_coordinates = []
         self.board = self.create_new_board()
         self.insert_values()
-        #self.display_board(self.board)
         self.shown = set()
         self.gameover = False
         self.victory = False
         self.flag_alert = False
-        #self.show(5,5)
-        #self.display_board(self.ui_board)
-        
+
+    
+
         
     def get_difficulty_level(self):
         """
@@ -42,7 +48,7 @@ class Game(ClearConsole):
         Place bombs, represented by character *, at random coordinates in the board 
         """
         board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
-        self.ui_board = [["\U0001F532" for a in range(self.board_size)] for b in range(self.board_size)]
+        self.ui_board = [[BLANK_SQUARE for a in range(self.board_size)] for b in range(self.board_size)]
  
 
         bomb_counter = 0
@@ -50,10 +56,10 @@ class Game(ClearConsole):
             # Generate two random coordinates considering the size of the board
             x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
             # If the cell has already a bomb, skip and go to the top of the while loop
-            if board[x][y] == "\U0001F4A5":
+            if board[x][y] == BOMB:
                 continue
             # If the cell has no bomb, place it
-            board[x][y] = "\U0001F4A5"
+            board[x][y] = BOMB
             bomb_counter += 1
         return board
   
@@ -64,7 +70,7 @@ class Game(ClearConsole):
         """
         for x in range(self.board_size):
             for y in range(self.board_size):
-                if self.board[x][y] == '\U0001F4A5':
+                if self.board[x][y] == BOMB:
                     continue
                 self.board[x][y] = self.get_near_bombs_num(x,y)
         
@@ -77,7 +83,7 @@ class Game(ClearConsole):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                 if r == x and c == y:
                     continue
-                if self.board[r][c] == '\U0001F4A5':
+                if self.board[r][c] == BOMB:
                     near_bombs_num += 1
         return str(near_bombs_num)
 
@@ -117,7 +123,7 @@ class Game(ClearConsole):
         if flag == False:
             self.shown.add((x,y))
             # If there is a bomb, game over
-            if self.board[x][y] == "\U0001F4A5":
+            if self.board[x][y] == BOMB:
                 self.ui_board[x][y] = self.board[x][y]
                 self.gameover = True
             # If there is one or more adjacent bomb, show only that cell
@@ -127,17 +133,17 @@ class Game(ClearConsole):
             # If there is no adjacent bomb, enlarge the shown area until
             # you find a cell with adjacent bombs
             elif int(self.board[x][y]) == 0:
-                self.ui_board[x][y] = "\U0001F340"
+                self.ui_board[x][y] = CLOVER
                 for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
                     for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                         if (r, c) in self.shown:
                             continue
                         self.show(r, c, flag)
         else:
-            if self.ui_board[x][y] == "\U0001F532": # ascii white square
-                self.ui_board[x][y] = "\U0001F6A9" # ascii Flag
-            elif self.ui_board[x][y] == "\U0001F6A9": # ascii Flag
-                self.ui_board[x][y] = "\U0001F532" # ascii white square
+            if self.ui_board[x][y] == BLANK_SQUARE: # ascii white square
+                self.ui_board[x][y] = FLAG # ascii Flag
+            elif self.ui_board[x][y] == FLAG: # ascii Flag
+                self.ui_board[x][y] = BLANK_SQUARE # ascii white square
             else: 
                 print("Cannot place a flag in an already shown spot!")
     
@@ -175,7 +181,7 @@ class Game(ClearConsole):
                     flag = False
                     self.clear_display()
                     self.display_board(self.ui_board)
-                    print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
+                    print("\nLet's dig in! Whatch out for mines and good luck!" + CLOVER)
                     x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
                     if x < 0 or x > self.board_size + 1:
                         print("The row does not exist")
@@ -185,7 +191,7 @@ class Game(ClearConsole):
                         print("The column does not exist")
                         continue
                     # If there is a flag, print alert
-                    if self.ui_board[x][y] == "\U0001F6A9":
+                    if self.ui_board[x][y] == FLAG:
                         print(Fore.RED + "\nPlease remove the flag before digging")
                         self.flag_alert = True 
                     else:
