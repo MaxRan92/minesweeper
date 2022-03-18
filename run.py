@@ -26,6 +26,7 @@ class Game(ClearConsole):
         self.gameover = False
         self.victory = False
         self.flag_alert = False
+        self.flag = False
 
     def initial_screen(self):
         """"
@@ -59,7 +60,7 @@ class Game(ClearConsole):
         #print the rules
         print(" - RULES OF THE GAME - \n\n\n The field has several mines under its ground and your task is to identify and isolate them, digging only the safe spots! \n\n Every time you dig in a safe spot, a number will appear representing the number of surrounding mines: with a little bit of logic, you will be able to localize them. \n\n When you localize a mine, place a flag over its cell as a reminder, so that you will not dig there by mistake. \n\n If you dig all the safe spots in the field without any mistake, you win!\n\n ")
         # ask to start the game
-        start_game = input("To start the game, press any key\n")
+        start_game = input("Click enter to start the game!\n")
         self.clear_display()
         self.get_difficulty_level()
         self.clear_display()
@@ -204,27 +205,32 @@ class Game(ClearConsole):
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
-            if self.gameover == True:
+            if self.gameover:
                 print("\nOuch, there was a mine!! \n" +
                       Fore.RED + "Game Over!" + Fore.WHITE)
                 self.restart_game()
                 break
             else:
-                starter = input(
-                    Fore.WHITE + "-  Press Enter to dig\n-  Press F to place/remove a flag\n")
-                if starter in ["F", "f", "flag"]:
-                    flag = True
-                    self.flag_alert = False
-                else:
-                    flag = False
+                self.dig_or_flag_selector()
                 self.clear_display()
                 self.display_board(self.ui_board)
-                self.get_coordinates(flag)
+                self.get_coordinates(self.flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
             print("\nCONGRATULATIONS! You cleared the field!")
             self.victory = True
             self.restart_game()
+
+    def dig_or_flag_selector(self):
+        starter = input(
+            Fore.WHITE + "-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+        if starter in ["F", "f", "flag"]:
+            self.flag = True
+            self.flag_alert = False
+        else:
+            self.flag = False
+        
+
 
     def get_coordinates(self, flag):
         """
@@ -238,11 +244,16 @@ class Game(ClearConsole):
             print(f"Let's dig in! Watch out for mines and good luck! {CLOVER}")
         # insert row value
         row_input = input(
-            "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
-        # if value not a digit, enter again
-        while not row_input.isdigit():
+            "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
+        # if value not a digit or B, enter again
+        while not (row_input.isdigit() or row_input.lower() in ["b", "back"]):
             row_input = input(
                 Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+        if row_input.lower() in ["b", "back"]:
+            self.clear_display()
+            self.display_board(self.ui_board)
+            self.dig_or_flag_selector()
+            self.get_coordinates(self.flag)
         x = int(row_input) - 1
         # if value out of range, enter again
         while x < 0 or x > self.board_size + 1:
@@ -250,11 +261,16 @@ class Game(ClearConsole):
                 Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
         # insert row value
         col_input = input(
-            "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
-        # if value not a digit, enter again
-        while not col_input.isdigit():
+            "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
+        # if value not a digit or B, enter again
+        while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):
             col_input = input(
                 Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+        if col_input.lower() in ["b", "back"]:
+            self.clear_display()
+            self.display_board(self.ui_board)
+            self.dig_or_flag_selector()
+            self.get_coordinates(self.flag)
         y = int(col_input) - 1
         # if value out of range, enter again
         while y < 0 or y > self.board_size + 1:
