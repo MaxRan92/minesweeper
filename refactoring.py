@@ -2,9 +2,13 @@ from colorama import Fore
 import random
 from mixins import ClearConsole
 
-WHITE_BOX = "\U0001F532"
-BOMB = "\U0001F4A5"
-CLOVER = "\U0001F340"
+"""
+Assign ASCII icons code to variables 
+"""
+BOMB = '\U0001F4A5'
+BLANK_SQUARE = '\U0001F532'
+CLOVER = '\U0001F340'
+FLAG = '\U0001F6A9'
 
 
 class Game(ClearConsole):
@@ -14,28 +18,57 @@ class Game(ClearConsole):
 
     def __init__(self):
         """
-        Board size and bomb number variable assignment 
+        Setting variables 
         """
-        self.board_size = 0
-        self.bomb_num = 0
-        self.get_difficulty_level()
         self.ui_board = []
         self.x_coordinates = []
-        self.board = self.create_new_board()
-        self.insert_values()
         self.shown = set()
         self.gameover = False
         self.victory = False
         self.flag_alert = False
-        self.x_separation = ""
 
-    def get_difficulty_level(self):
+    def initial_screen(self):
+        """"
+        Displays banner and asks user to
+        insert his name
+        """
+        print("""
+                   __    __     __     __   __     ______                           
+                  /\ "-./  \   /\ \   /\ "-.\ \   /\  ___\                          
+                  \ \ \-./\ \  \ \ \  \ \ \-.  \  \ \  __\                          
+                   \ \_\ \ \_\  \ \_\  \ \_\\"\_\  \ \_____\                        
+                    \/_/  \/_/   \/_/   \/_/ \/_/   \/_____/                        
+                                                                                 
+           ______     __     __     ______     ______     ______   ______     ______       
+          /\  ___\   /\ \  _ \ \   /\  ___\   /\  ___\   /\  == \ /\  ___\   /\  == \      
+          \ \___  \  \ \ \/ ".\ \  \ \  __\   \ \  __\   \ \  _-/ \ \  __\   \ \  __<      
+           \/\_____\  \ \__/".~\_\  \ \_____\  \ \_____\  \ \_\    \ \_____\  \ \_\ \_\    
+            \/_____/   \/_/   \/_/   \/_____/   \/_____/   \/_/     \/_____/   \/_/ /_/   
+            """)
+        global username
+        # ask to enter a username until it is done
+        print("Welcome to Minesweeper!\nPlease insert your name")
+        username = input().strip()
+        while len(username) == 0:
+            print("It looks like you haven't typed anything, please enter your name!")  # noqa
+            username = input().strip()
+        self.clear_display()
+        print("\nHi " + Fore.GREEN + f"{username}!")
+
+    def get_difficulty_level(self, difficulty):
         """
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
-        self.board_size = 10
-        self.bomb_num = 15
+        if difficulty in ["h", "hard"]:
+            self.board_size = 20
+            self.bomb_num = 60
+        elif difficulty in ["m", "medium"]:
+            self.board_size = 10
+            self.bomb_num = 15
+        elif difficulty in ["e", "easy"]:
+            self.board_size = 5
+            self.bomb_num = 4
 
     def create_new_board(self):
         """
@@ -44,13 +77,14 @@ class Game(ClearConsole):
         """
         board = [[None for a in range(self.board_size)]
                  for b in range(self.board_size)]
-        self.ui_board = [[WHITE_BOX for a in range(
+        self.ui_board = [[BLANK_SQUARE for a in range(
             self.board_size)] for b in range(self.board_size)]
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
             # Generate two random coordinates considering the size of the board
-            x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)  # noqa
+            x, y = random.randint(0, self.board_size -
+                                  1), random.randint(0, self.board_size - 1)
             # If the cell has already a bomb, skip and go to the top of the while loop
             if board[x][y] == BOMB:
                 continue
@@ -118,7 +152,7 @@ class Game(ClearConsole):
         """
         check the cell chosen by the user:
         """
-        if not flag:
+        if flag == False:
             self.shown.add((x, y))
             # If there is a bomb, game over
             if self.board[x][y] == BOMB:
@@ -138,10 +172,10 @@ class Game(ClearConsole):
                             continue
                         self.show(r, c, flag)
         else:
-            if self.ui_board[x][y] == "\U0001F532":  # ascii white square
-                self.ui_board[x][y] = "\U0001F6A9"  # ascii Flag
-            elif self.ui_board[x][y] == "\U0001F6A9":  # ascii Flag
-                self.ui_board[x][y] = "\U0001F532"  # ascii white square
+            if self.ui_board[x][y] == BLANK_SQUARE:  # ascii white square
+                self.ui_board[x][y] = FLAG  # ascii Flag
+            elif self.ui_board[x][y] == FLAG:  # ascii Flag
+                self.ui_board[x][y] = BLANK_SQUARE  # ascii white square
             else:
                 print("Cannot place a flag in an already shown spot!")
 
@@ -149,6 +183,9 @@ class Game(ClearConsole):
         """
         runs the game
         """
+        self.get_difficulty_level(difficulty)
+        self.board = self.create_new_board()
+        self.insert_values()
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
@@ -158,15 +195,15 @@ class Game(ClearConsole):
                 self.restart_game()
                 break
             else:
-                starter = ""
-                flag = False
-                print("\n-  Press D to dig\n-  Press F to place/remove a flag\n")
-                while starter not in ["f", "flag", "d", "dig"]:
-                    starter = input(Fore.WHITE + "Please enter D or F").lower()
-                    print(f"starter is {starter}")
-                if "f" in starter.lower():
+                starter = input(
+                    Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+                if starter in ["F", "f", "flag"]:
                     flag = True
                     self.flag_alert = False
+                else:
+                    flag = False   
+                self.clear_display()
+                self.display_board(self.ui_board)
                 self.get_coordinates(flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
@@ -174,25 +211,34 @@ class Game(ClearConsole):
             self.victory = True
             self.restart_game()
 
-    def get_coordinates(self,flag):
+
+    def get_coordinates(self, flag):
         """
         Docstring to be inserted
         """
         self.clear_display()
         self.display_board(self.ui_board)
         if flag:
-            print("\nLet's place a flag! \U0001F6A9")
+            print(f"\nLet's place a flag! {FLAG}")
         else:
-            print("\nLet's dig in! Whatch out for mines and good luck! \U0001F340")
+            print(f"\nLet's dig in! Watch out for mines and good luck! {BOMB}")
         x = 0
         y = 0
+        user_input = None
+        values = range(1, self.board_size + 1)
         print("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
-        while not x > 0 and not x < self.board_size + 1:
-            x = int(input(f"it should be a number between 1 and {self.board_size + 1}\n")) - 1
+        while int(x) not in values:
+            x = input(f"The Row Number should be a number between 1 and {self.board_size}\n")
+            if x.isalpha():
+                x = 0
+        x = int(x) - 1
         print("insert the " + Fore.YELLOW + "COLUMN NUMBER" +
-                Fore.WHITE + " of the selected cell:\n")
-        while not y > 0 and not y < self.board_size + 1:
-            y = int(input(f"it should be a number between 1 and {self.board_size + 1}\n")) - 1    
+              Fore.WHITE + " of the selected cell:\n")
+        while int(y) not in values:
+            y = input(f"The column number should be a number between 1 and {self.board_size}\n")
+            if y.isalpha():
+                y = 0
+        y = int(y) - 1
         if not flag:
             # If there is a flag, print alert
             if self.ui_board[x][y] == "\U0001F6A9":
@@ -221,19 +267,18 @@ def main():
     Runs game
     """
     game = Game()
-    global username
-    # ask to enter a username until it is done
-    print("Hello! What is your name?")
-    username = input().strip()
-    while len(username) == 0:
-        print("It looks like you haven't typed anything, please enter your name!")
-        username = input().strip()
-    game.clear_display()
-    print("\nHi " + Fore.GREEN + f"{username}!")
+    global difficulty
+    game.initial_screen()
     while True:
-        user_selection = input(
-            Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")
+        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")  # noqa
         if user_selection in ["play", "p", "yes", "y"]:
+            game.clear_display()
+            difficulty = input(
+                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+            while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
+                difficulty = input(
+                    Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
+            game.get_difficulty_level(difficulty)
             game.clear_display()
             game.run_game()
         elif user_selection in ["tutorial", "t"]:
@@ -245,11 +290,5 @@ def main():
         if game.gameover or game.victory:
             break
 
-
-"""
-def main():
-    #insert if you want to play or not
-    game = Game()
-"""
 
 main()
