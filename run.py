@@ -136,6 +136,8 @@ class Game(ClearConsole):
         self.x_coordinates = '    ' + self.x_coordinates
         self.x_separation = ' '.join(self.x_separation)
         self.x_separation = '     ' + self.x_separation
+        print(self.x_coordinates)
+        print(self.x_separation)
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
