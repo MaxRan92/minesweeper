@@ -196,7 +196,7 @@ class Game(ClearConsole):
                 break
             else:
                 starter = input(
-                    Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+                    Fore.WHITE + "-  Press Enter to dig\n-  Press F to place/remove a flag\n")
                 if starter in ["F", "f", "flag"]:
                     flag = True
                     self.flag_alert = False
