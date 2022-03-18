@@ -166,16 +166,19 @@ class Game(ClearConsole):
                     self.flag_alert = False
                     self.clear_display()
                     self.display_board(self.ui_board)
-                    print("\nLet's place a flag! \U0001F6A9")
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if x < 0 or x > self.board_size + 1:
-                        print("The row does not exist")
-                        continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if y < 0 or y > self.board_size + 1:
-                        self.clear_display()
-                        print("The column does not exist")
-                        continue
+                    print("\nLet's place a flag!" + FLAG)
+                    row_input = input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    while not row_input.isdigit():
+                        row_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    x = int(row_input) - 1    
+                    while x < 0 or x > self.board_size + 1:
+                        x = int(input(Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1                     
+                    col_input = input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    while not col_input.isdigit():
+                        col_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    y = int(col_input) - 1    
+                    while y < 0 or y > self.board_size + 1:
+                        y = int(input(Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1 
                     self.clear_display()
                     self.show(x,y,flag)
                 else:
@@ -183,14 +186,18 @@ class Game(ClearConsole):
                     self.clear_display()
                     self.display_board(self.ui_board)
                     print("\nLet's dig in! Whatch out for mines and good luck!" + CLOVER)
-                    x = int(input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if x < 0 or x > self.board_size + 1:
-                        print("The row does not exist")
-                        continue
-                    y = int(input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")) - 1
-                    if y < 0 or y > self.board_size + 1:
-                        print("The column does not exist")
-                        continue
+                    row_input = input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    while not row_input.isdigit():
+                        row_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    x = int(row_input) - 1    
+                    while x < 0 or x > self.board_size + 1:
+                        x = int(input(Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1                     
+                    col_input = input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    while not col_input.isdigit():
+                        col_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    y = int(col_input) - 1    
+                    while y < 0 or y > self.board_size + 1:
+                        y = int(input(Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
                     # If there is a flag, print alert
                     if self.ui_board[x][y] == FLAG:
                         print(Fore.RED + "\nPlease remove the flag before digging")
