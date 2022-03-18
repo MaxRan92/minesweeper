@@ -55,11 +55,27 @@ class Game(ClearConsole):
         self.clear_display()
         print("\nHi " + Fore.GREEN + f"{username}!")
 
-    def get_difficulty_level(self, difficulty):
+    def tutorial(self):
+        #print the rules
+        print(" - RULES OF THE GAME - \n\n\n The field has several mines under its ground and your task is to identify and isolate them, digging only the safe spots! \n\n Every time you dig in a safe spot, a number will appear representing the number of surrounding mines: with a little bit of logic, you will be able to localize them. \n\n When you localize a mine, place a flag over its cell as a reminder, so that you will not dig there by mistake. \n\n If you dig all the safe spots in the field without any mistake, you win!\n\n ")
+        # ask to start the game
+        start_game = input("To start the game, press any key\n")
+        self.clear_display()
+        self.get_difficulty_level()
+        self.clear_display()
+        self.run_game()
+
+    def get_difficulty_level(self):
         """
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
+        difficulty = input(
+                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+        while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
+            difficulty = input(
+                Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
+
         if difficulty in ["h", "hard"]:
             self.board_size = 14
             self.bomb_num = 30
@@ -183,7 +199,6 @@ class Game(ClearConsole):
         """
         runs the game
         """
-        self.get_difficulty_level(difficulty)
         self.board = self.create_new_board()
         self.insert_values()
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
@@ -201,7 +216,7 @@ class Game(ClearConsole):
                     flag = True
                     self.flag_alert = False
                 else:
-                    flag = False   
+                    flag = False
                 self.clear_display()
                 self.display_board(self.ui_board)
                 self.get_coordinates(flag)
@@ -210,7 +225,6 @@ class Game(ClearConsole):
             print("\nCONGRATULATIONS! You cleared the field!")
             self.victory = True
             self.restart_game()
-
 
     def get_coordinates(self, flag):
         """
@@ -264,6 +278,8 @@ class Game(ClearConsole):
         if restart in ["y", "yes"]:
             self.clear_display()
             self.__init__()
+            self.get_difficulty_level()
+            self.clear_display()
             self.run_game()
         else:
             print(f"Thank you for playing {username}!")
@@ -274,22 +290,17 @@ def main():
     Runs game
     """
     game = Game()
-    global difficulty
     game.initial_screen()
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")  # noqa
         if user_selection in ["play", "p", "yes", "y"]:
             game.clear_display()
-            difficulty = input(
-                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
-            while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
-                difficulty = input(
-                    Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
-            game.get_difficulty_level(difficulty)
+            game.get_difficulty_level()
             game.clear_display()
             game.run_game()
         elif user_selection in ["tutorial", "t"]:
-            print("Tutorial to be inserted")
+            game.clear_display()
+            game.tutorial()
         else:
             game.clear_display()
             print(
