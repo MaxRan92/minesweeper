@@ -219,9 +219,9 @@ class Game(ClearConsole):
         self.clear_display()
         self.display_board(self.ui_board)
         if flag:
-            print(f"\nLet's place a flag! {FLAG}")
+            print(f"Let's place a flag! {FLAG}")
         else:
-            print(f"\nLet's dig in! Watch out for mines and good luck! {CLOVER}")
+            print(f"Let's dig in! Watch out for mines and good luck! {CLOVER}")
         # insert row value
         row_input = input(
             "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
