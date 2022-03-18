@@ -61,8 +61,8 @@ class Game(ClearConsole):
         the difficulty level chosen by the user
         """
         if difficulty in ["h", "hard"]:
-            self.board_size = 15
-            self.bomb_num = 35
+            self.board_size = 14
+            self.bomb_num = 30
         elif difficulty in ["m", "medium"]:
             self.board_size = 10
             self.bomb_num = 15
