@@ -10,10 +10,12 @@ BLANK_SQUARE = '\U0001F532'
 CLOVER = '\U0001F340'
 FLAG = '\U0001F6A9'
 
+
 class Game(ClearConsole):
     """
     Create the gaming board
     """
+
     def __init__(self):
         """
         Setting variables 
@@ -24,8 +26,8 @@ class Game(ClearConsole):
         self.gameover = False
         self.victory = False
         self.flag_alert = False
-    
-    def get_difficulty_level(self,difficulty):
+
+    def get_difficulty_level(self, difficulty):
         """
         Assign board size and bomb num according to
         the difficulty level chosen by the user
@@ -38,21 +40,23 @@ class Game(ClearConsole):
             self.bomb_num = 15
         elif difficulty in ["e", "easy"]:
             self.board_size = 5
-            self.bomb_num = 4  
+            self.bomb_num = 4
 
     def create_new_board(self):
         """
         Create board arrays with none values
         Place bombs, represented by character *, at random coordinates in the board 
         """
-        board = [[None for a in range(self.board_size)] for b in range(self.board_size)]
-        self.ui_board = [[BLANK_SQUARE for a in range(self.board_size)] for b in range(self.board_size)]
- 
+        board = [[None for a in range(self.board_size)]
+                 for b in range(self.board_size)]
+        self.ui_board = [[BLANK_SQUARE for a in range(
+            self.board_size)] for b in range(self.board_size)]
 
         bomb_counter = 0
         while bomb_counter < self.bomb_num:
             # Generate two random coordinates considering the size of the board
-            x, y = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
+            x, y = random.randint(0, self.board_size -
+                                  1), random.randint(0, self.board_size - 1)
             # If the cell has already a bomb, skip and go to the top of the while loop
             if board[x][y] == BOMB:
                 continue
@@ -60,7 +64,7 @@ class Game(ClearConsole):
             board[x][y] = BOMB
             bomb_counter += 1
         return board
-  
+
     def insert_values(self):
         """
         for each cell that has no bomb, assign a value representing
@@ -70,12 +74,12 @@ class Game(ClearConsole):
             for y in range(self.board_size):
                 if self.board[x][y] == BOMB:
                     continue
-                self.board[x][y] = self.get_near_bombs_num(x,y)
-        
-    def get_near_bombs_num(self,x,y):
+                self.board[x][y] = self.get_near_bombs_num(x, y)
+
+    def get_near_bombs_num(self, x, y):
         """
         iterate through the 8 adiacent cells 
-        """        
+        """
         near_bombs_num = 0
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
@@ -94,9 +98,11 @@ class Game(ClearConsole):
         self.x_separation = []
         for a in range(self.board_size):
             if a < 9:
-                self.x_coordinates.append(f"{'  ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
+                self.x_coordinates.append(
+                    f"{'  ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             else:
-                self.x_coordinates.append(f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
+                self.x_coordinates.append(
+                    f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             self.x_separation.append('---')
         self.x_coordinates = ' '.join(self.x_coordinates)
         self.x_coordinates = '    ' + self.x_coordinates
@@ -119,7 +125,7 @@ class Game(ClearConsole):
         check the cell chosen by the user:
         """
         if flag == False:
-            self.shown.add((x,y))
+            self.shown.add((x, y))
             # If there is a bomb, game over
             if self.board[x][y] == BOMB:
                 self.ui_board[x][y] = self.board[x][y]
@@ -138,13 +144,13 @@ class Game(ClearConsole):
                             continue
                         self.show(r, c, flag)
         else:
-            if self.ui_board[x][y] == BLANK_SQUARE: # ascii white square
-                self.ui_board[x][y] = FLAG # ascii Flag
-            elif self.ui_board[x][y] == FLAG: # ascii Flag
-                self.ui_board[x][y] = BLANK_SQUARE # ascii white square
-            else: 
+            if self.ui_board[x][y] == BLANK_SQUARE:  # ascii white square
+                self.ui_board[x][y] = FLAG  # ascii Flag
+            elif self.ui_board[x][y] == FLAG:  # ascii Flag
+                self.ui_board[x][y] = BLANK_SQUARE  # ascii white square
+            else:
                 print("Cannot place a flag in an already shown spot!")
-    
+
     def run_game(self):
         """
         runs the game
@@ -156,61 +162,88 @@ class Game(ClearConsole):
             if self.flag_alert == False:
                 self.display_board(self.ui_board)
             if self.gameover == True:
-                print("\nOuch, there was a mine!! \n" + Fore.RED + "Game Over!" + Fore.WHITE)
+                print("\nOuch, there was a mine!! \n" +
+                      Fore.RED + "Game Over!" + Fore.WHITE)
                 self.restart_game()
                 break
-            else:   
-                starter = input(Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+            else:
+                starter = input(
+                    Fore.WHITE + "\n-  Press Enter to dig\n-  Press F to place/remove a flag\n")
                 if starter in ["F", "f", "flag"]:
                     flag = True
                     self.flag_alert = False
                     self.clear_display()
                     self.display_board(self.ui_board)
                     print("\nLet's place a flag!" + FLAG)
-                    row_input = input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    # insert row value
+                    row_input = input(
+                        "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    # if value not a digit, enter again
                     while not row_input.isdigit():
-                        row_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-                    x = int(row_input) - 1    
+                        row_input = input(
+                            Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    x = int(row_input) - 1
+                    # if value out of range, enter again
                     while x < 0 or x > self.board_size + 1:
-                        x = int(input(Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1                     
-                    col_input = input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                        x = int(input(
+                            Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                    # insert row value
+                    col_input = input(
+                        "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    # if value not a digit, enter again
                     while not col_input.isdigit():
-                        col_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-                    y = int(col_input) - 1    
+                        col_input = input(
+                            Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    y = int(col_input) - 1
+                    # if value out of range, enter again
                     while y < 0 or y > self.board_size + 1:
-                        y = int(input(Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1 
+                        y = int(input(
+                            Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
                     self.clear_display()
-                    self.show(x,y,flag)
+                    self.show(x, y, flag)
                 else:
                     flag = False
                     self.clear_display()
                     self.display_board(self.ui_board)
-                    print("\nLet's dig in! Whatch out for mines and good luck!" + CLOVER)
-                    row_input = input("insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    print(
+                        "\nLet's dig in! Whatch out for mines and good luck!" + CLOVER)
+                    # insert row value
+                    row_input = input(
+                        "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    # if value not a digit, enter again
                     while not row_input.isdigit():
-                        row_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-                    x = int(row_input) - 1    
+                        row_input = input(
+                            Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    x = int(row_input) - 1
+                    # if value out of range, enter again
                     while x < 0 or x > self.board_size + 1:
-                        x = int(input(Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1                     
-                    col_input = input("insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                        x = int(input(
+                            Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                    # insert row value
+                    col_input = input(
+                        "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell:\n")
+                    # if value not a digit, enter again
                     while not col_input.isdigit():
-                        col_input = input(Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-                    y = int(col_input) - 1    
+                        col_input = input(
+                            Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+                    y = int(col_input) - 1
+                    # if value out of range, enter again
                     while y < 0 or y > self.board_size + 1:
-                        y = int(input(Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                        y = int(input(
+                            Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
                     # If there is a flag, print alert
                     if self.ui_board[x][y] == FLAG:
                         print(Fore.RED + "\nPlease remove the flag before digging")
-                        self.flag_alert = True 
+                        self.flag_alert = True
                     else:
                         self.flag_alert = False
                         self.clear_display()
-                        self.show(x,y,flag)
+                        self.show(x, y, flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
-                    self.display_board(self.ui_board)
-                    print("\nCONGRATULATIONS! You cleared the field!")
-                    self.victory = True
-                    self.restart_game()        
+            self.display_board(self.ui_board)
+            print("\nCONGRATULATIONS! You cleared the field!")
+            self.victory = True
+            self.restart_game()
 
     def restart_game(self):
         """
@@ -224,6 +257,7 @@ class Game(ClearConsole):
         else:
             print(f"Thank you for playing {username}!")
 
+
 def main():
     """
     Runs game
@@ -235,17 +269,19 @@ def main():
     print("Hello! What is your name?")
     username = input().strip()
     while len(username) == 0:
-        print("It looks like you haven't typed anything, please enter your name!") # noqa
+        print("It looks like you haven't typed anything, please enter your name!")  # noqa
         username = input().strip()
     game.clear_display()
     print("\nHi " + Fore.GREEN + f"{username}!")
     while True:
-        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n") # noqa
+        user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")  # noqa
         if user_selection in ["play", "p", "yes", "y"]:
             game.clear_display()
-            difficulty = input("Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+            difficulty = input(
+                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
             while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
-                difficulty = input(Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
+                difficulty = input(
+                    Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
             game.get_difficulty_level(difficulty)
             game.clear_display()
             game.run_game()
@@ -253,8 +289,10 @@ def main():
             print("Tutorial to be inserted")
         else:
             game.clear_display()
-            print(Fore.RED + f"Hey {username}, your input is not recognized! \n")
+            print(
+                Fore.RED + f"Hey {username}, your input is not recognized! \n")
         if game.gameover or game.victory:
             break
+
 
 main()
