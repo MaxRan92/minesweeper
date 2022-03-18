@@ -254,37 +254,39 @@ class Game(ClearConsole):
             self.display_board(self.ui_board)
             self.dig_or_flag_selector()
             self.get_coordinates(self.flag)
-        x = int(row_input) - 1
-        # if value out of range, enter again
-        while x < 0 or x > self.board_size - 1:
-            x = int(input(
-                Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
-        # insert row value
-        col_input = input(
-            "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
-        # if value not a digit or B, enter again
-        while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):
+        else:    
+            x = int(row_input) - 1
+            # if value out of range, enter again
+            while x < 0 or x > self.board_size - 1:
+                x = int(input(
+                    Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+            # insert row value
             col_input = input(
-                Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-        if col_input.lower() in ["b", "back"]:
-            self.clear_display()
-            self.display_board(self.ui_board)
-            self.dig_or_flag_selector()
-            self.get_coordinates(self.flag)
-        y = int(col_input) - 1
-        # if value out of range, enter again
-        while y < 0 or y > self.board_size - 1:
-            y = int(input(
-                Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
-        if not flag:
-            # If there is a flag, print alert
-            if self.ui_board[x][y] == FLAG:
-                print(Fore.RED + "\nPlease remove the flag before digging")
-                self.flag_alert = True
+                "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
+            # if value not a digit or B, enter again
+            while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):
+                col_input = input(
+                    Fore.RED + "Value not recognized, please enter a valid number\n" + Fore.WHITE)
+            if col_input.lower() in ["b", "back"]:
+                self.clear_display()
+                self.display_board(self.ui_board)
+                self.dig_or_flag_selector()
+                self.get_coordinates(self.flag)
             else:
-                self.flag_alert = False
-        self.clear_display()
-        self.show(x, y, flag)
+                y = int(col_input) - 1
+                # if value out of range, enter again
+                while y < 0 or y > self.board_size - 1:
+                    y = int(input(
+                        Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                if not flag:
+                    # If there is a flag, print alert
+                    if self.ui_board[x][y] == FLAG:
+                        print(Fore.RED + "\nPlease remove the flag before digging")
+                        self.flag_alert = True
+                    else:
+                        self.flag_alert = False
+                self.clear_display()
+                self.show(x, y, flag)
 
     def restart_game(self):
         """
