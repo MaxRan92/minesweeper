@@ -256,7 +256,7 @@ class Game(ClearConsole):
             self.get_coordinates(self.flag)
         x = int(row_input) - 1
         # if value out of range, enter again
-        while x < 0 or x > self.board_size + 1:
+        while x < 0 or x > self.board_size - 1:
             x = int(input(
                 Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
         # insert row value
@@ -273,7 +273,7 @@ class Game(ClearConsole):
             self.get_coordinates(self.flag)
         y = int(col_input) - 1
         # if value out of range, enter again
-        while y < 0 or y > self.board_size + 1:
+        while y < 0 or y > self.board_size - 1:
             y = int(input(
                 Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
         if not flag:
