@@ -27,6 +27,34 @@ class Game(ClearConsole):
         self.victory = False
         self.flag_alert = False
 
+    def initial_screen(self):
+        """"
+        Displays banner and asks user to
+        insert his name
+        """
+        print("""
+                   __    __     __     __   __     ______                           
+                  /\ "-./  \   /\ \   /\ "-.\ \   /\  ___\                          
+                  \ \ \-./\ \  \ \ \  \ \ \-.  \  \ \  __\                          
+                   \ \_\ \ \_\  \ \_\  \ \_\\"\_\  \ \_____\                        
+                    \/_/  \/_/   \/_/   \/_/ \/_/   \/_____/                        
+                                                                                 
+                 ______     __     __     ______     ______     ______   ______     ______       
+                /\  ___\   /\ \  _ \ \   /\  ___\   /\  ___\   /\  == \ /\  ___\   /\  == \      
+                \ \___  \  \ \ \/ ".\ \  \ \  __\   \ \  __\   \ \  _-/ \ \  __\   \ \  __<      
+                 \/\_____\  \ \__/".~\_\  \ \_____\  \ \_____\  \ \_\    \ \_____\  \ \_\ \_\    
+                  \/_____/   \/_/   \/_/   \/_____/   \/_____/   \/_/     \/_____/   \/_/ /_/   
+            """)
+        global username
+        # ask to enter a username until it is done
+        print("Hello! What is your name?")
+        username = input().strip()
+        while len(username) == 0:
+            print("It looks like you haven't typed anything, please enter your name!")  # noqa
+            username = input().strip()
+        self.clear_display()
+        print("\nHi " + Fore.GREEN + f"{username}!")
+
     def get_difficulty_level(self, difficulty):
         """
         Assign board size and bomb num according to
@@ -264,15 +292,7 @@ def main():
     """
     game = Game()
     global difficulty
-    global username
-    # ask to enter a username until it is done
-    print("Hello! What is your name?")
-    username = input().strip()
-    while len(username) == 0:
-        print("It looks like you haven't typed anything, please enter your name!")  # noqa
-        username = input().strip()
-    game.clear_display()
-    print("\nHi " + Fore.GREEN + f"{username}!")
+    game.initial_screen()
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")  # noqa
         if user_selection in ["play", "p", "yes", "y"]:
