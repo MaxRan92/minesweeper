@@ -54,8 +54,10 @@ Just like the original game, the user can decide to dig or flag the chosen cell.
 
 Cells can be selected entering first the Row index, then the Column one. At each one of these steps, the user can press B ad go back to the dig or flag choice.
 
+![Enter Coordinates](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/board-display.png)
+
 #### Fully updating display
-With the use of ClearDisplay method, the screen updates and there will not be old data left on the top of the command line
+With the use of ClearDisplay method, the screen updates and there will not be old or useless data output left at the top of the command line
 
 #### User input made easier, with complete error handling
 - Case insensitivity
@@ -72,14 +74,17 @@ Whether the game is terminated with a victory or not, the user is offered to pla
 
 #### User interface
 With all the limits that a simple command line has, basic but clear UI has been implemented.
-Colors help the user to focus his attention on the actions (keys to press to continue, row/column coordinates to insert etc).
-Moreover, use of ASCII logo and emoji help to improve the aseptic black and white outlook.
+Colors help the user to focus his attention on the actions (keys to press, row/column coordinates to insert etc).
+Moreover, the use of ASCII logo and emoji helps to enhance the old fashioned black and white look.
 
 ## Flow Chart 
+The rules of the game described above are put into practice via the following flowchart.
 
 ![FlowChart](https://github.com/MaxRan92/minesweeper/blob/main/docs/flowchart/full-flowchart.png)
 
 ## Main Methods
+Below you may find a brief description of the main function used to implement the flow above.
+
 1) **initial_screen()**: Welcome screen with logo and username input
 2) **tutorial()**: Prints the rules of the game
 3) **get_difficulty_level()**: Asks to the user the level of difficulty
@@ -98,14 +103,16 @@ Moreover, use of ASCII logo and emoji help to improve the aseptic black and whit
 ## Validator Testing - PEP8 
 
 - The code is PEP8 validated, however manual intervention was necessary to meet all the requirements.
-  Most of the alerts were regarding the number of blank lines between methods, trailing whitespaces to be deleted and too long lines.
-  About this last alert, I included '  # noqa' on those parts in which shorter than 79 characters lines may lead to bad readibility
+  Most of the alerts were about the number of blank lines between methods, trailing whitespaces to be deleted and too long lines.
+  About this last alert type, '  # noqa' string were included on those parts in which shorter than 79 characters lines may lead to bad readibility.
 ![Validation Errors](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/pep8.png)
 
 ## Manual Testing and Interesting Code Logics
 Manual testing has been implemented in all the phases of the project. Here I summarize and document the most significant issues encountered:
 
 1) **Row/Column input handling**
+
+
   The code below comes from the 8) **get_coordinates()** method. As explained by the comments, the code does the following steps:
     - takes a row input
     - If the input is B (back), the code leads to the dir_or_flag_selection method.
@@ -128,9 +135,11 @@ Manual testing has been implemented in all the phases of the project. Here I sum
                 continue
                 
 2) **To loop through the 8 adjacent cell if dug cell is empty**
+
+
   As per flowchart, if a cell with no adjacent mine is dug, a recursive function should enlarge to the neighbouring cells until a close-to-mine cell (hence with a number) is met and shown.
   Heach loop of the recursive function should loop through all the adjacent cells, and is made via a duble "for" loop which combines left and right cells with up and down ones. 
-  At first the code would break and not enlarge, since the if condition in the last three rows was not inserted: the for loops iterates all the adjacent cells but also the cell dug at first: the second dig would trigger the "already dug cell" alert and stop the code.
+  At first the code would break and not enlarge, since the if-condition in the last rows was not inserted: the for loops iterates all the adjacent cells but also the cell dug at first, and this would trigger the "already dug cell" alert and stop the code.
   
         # loop through the 8 adjacent cells and show all of them
         # if not already shown before
@@ -141,19 +150,25 @@ Manual testing has been implemented in all the phases of the project. Here I sum
                 self.show(r, c, flag)
 
 3) **To define a victory**
+
+
   While for losing you just need to dig in the wrong place (quite easy to code), for victory the logic is more interesting.
   Win comes when all the "safe" cells are dug. This is obtained storing in a set (which hosts unique values) a series of tuple with two numbers representing the coordinates of already dug cells.
   The set lenght (which corresponds to the number of cells dug) was at first compared to the total number of the cells: if they were equal, means that we uncovered all the cells safely! ... but that is not possible! 
-  The total number of cells contains also those with a mine, hence it is impossible to win digging also them.
-  The solution is in the code below: a while loop that makes you play until the number of shown cells equals the total number of cells of the board, minus the number of bombs.
+  
+  
+  The total number of cells contains also those with a mine, hence it is impossible to win digging every cell.
+  The solution is in the code below: a while loop that makes the user play and dig until the number of shown cells equals the total number of cells of the board, minus the number of bombs.
   
         # loop that keeps running until all the cells that do not
         # contain bombs are shown
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
 
 4) **To avoid bomb at the first dig**
+
+
   As per official rules, the first dig should not return a bomb. That would be frustrating!
-  I was able to implement it easily with the code below: if the shown set has a lenght of zero, meaning no cells have been dug, and the player is so unfortunate to dig   a BOMB at his first trial, keep recreating a table until that cell is safe.
+  However, this feature was easily implemented adding the code below: if the shown set has a lenght of zero, meaning no cells have been dug, and the player is so unfortunate to dig a bomb at his first trial, the code keep recreating a complete table until that first chosen cell is safe.
   
         if len(self.shown) == 0:
           while self.board[x][y] == BOMB:
@@ -194,13 +209,13 @@ The game is deployed on Heroku and the process involved is the following:
 
 
 ### Gitpod
-Is it also possible to deploy the project on github and make it run on its terminal.
+Is it also possible to deploy the project on Github and make it run on its terminal.
 To do so, first type ```pip3 install -r requirements.txt```, so that all the required installation are done.
 Then, type ```python3 run.py``` to run the program on the terminal.
 
 
 ## Credits and Ackowledgments
 
-- First of all, I am greetful towards my mentor Malia: her experience and competence are very useful and inspirational. 
+- First of all, I have to thank my mentor Malia: as always her experience, competence and fast thinking are very useful and inspirational. 
 - The code structure and logic is inspired to this short but useful [Video](https://www.youtube.com/watch?v=Fjw7Lc9zlyU).
-- Flowchart is made on this [Site](https://app.diagrams.net/).
+- Flowchart is made thank to this very intuitive and easy to use [Site](https://app.diagrams.net/).
