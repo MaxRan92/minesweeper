@@ -127,7 +127,8 @@ class Game():
             ClearConsole.clear_display()
             print(Fore.RED + "\nInput not recognized\n" + Fore.WHITE)
             difficulty = input(
-                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n").lower()
+                "Please select a difficulty level \nh:hard \nm:medium "
+                "\ne:easy\n").lower()
 
         # each difficulty level has increasing number of cells and bombs
         if difficulty in ["h", "hard"]:
