@@ -85,6 +85,7 @@ class Game():
         print("Welcome to Minesweeper!\nPlease insert your name")
         self.username = input().strip()
         while len(self.username) == 0:
+            ClearConsole.clear_display()
             print("It looks like you haven't typed anything, please enter your name!")  # noqa
             self.username = input().strip()
         ClearConsole.clear_display()
@@ -123,8 +124,10 @@ class Game():
         difficulty = input(
             "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
         while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
+            ClearConsole.clear_display()
+            print(Fore.RED + "\nInput not recognized\n" + Fore.WHITE)
             difficulty = input(
-                Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
+                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n").lower()
 
         # each difficulty level has increasing number of cells and bombs
         if difficulty in ["h", "hard"]:
@@ -315,7 +318,7 @@ class Game():
         # if all the cells that do not contain bombs are shown, you win
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
-            print("\n" + CLOVER + CLOVER + "CONGRATULATIONS! You cleared all the field!" + CLOVER + CLOVER)  # noqa
+            print("\n" + CLOVER + CLOVER + "  CONGRATULATIONS! You cleared all the field!  " + CLOVER + CLOVER)  # noqa
             self.victory = True
             self.restart_game()
 
