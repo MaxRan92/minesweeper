@@ -57,10 +57,22 @@ class Game(ClearConsole):
         print("\nHi " + Fore.GREEN + f"{username}!")
 
     def tutorial(self):
-        #print the rules
-        print(" - RULES OF THE GAME - \n\n\n The field has several mines under its ground and your task is to identify and isolate them, digging only the safe spots! \n\n Every time you dig in a safe spot, a number will appear representing the number of surrounding mines: with a little bit of logic, you will be able to localize them. \n\n When you localize a mine, place a flag over its cell as a reminder, so that you will not dig there by mistake. \n\n If you dig all the safe spots in the field without any mistake, you win!\n\n ")
+        """
+        Tutorial text
+        """
+        # print the rules
+        print(
+            " - RULES OF THE GAME - \n\n\n The field has several mines"
+            " under its ground and your task is to identify and isolate them"
+            ", digging only the safe spots! \n\n Every time you dig in a safe"
+            " spot, a number will appear representing the number of "
+            "surrounding mines: with a little bit of logic, you will "
+            "be able to localize them. \n\n When you localize a mine,"
+            " place a flag over its cell as a reminder, so that you "
+            "will not dig there by mistake. \n\n If you dig all the "
+            "safe spots in the field without any mistake, you win!\n\n ")
         # ask to start the game
-        start_game = input("Click enter to start the game!\n")
+        input("Press enter to start the game!\n")
         self.clear_display()
         self.get_difficulty_level()
         self.clear_display()
@@ -72,7 +84,7 @@ class Game(ClearConsole):
         the difficulty level chosen by the user
         """
         difficulty = input(
-                "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+            "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
         while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
             difficulty = input(
                 Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
@@ -90,7 +102,8 @@ class Game(ClearConsole):
     def create_new_board(self):
         """
         Create board arrays with none values
-        Place bombs, represented by character *, at random coordinates in the board 
+        Place bombs, represented by character *,
+        at random coordinates in the board 
         """
         board = [[None for a in range(self.board_size)]
                  for b in range(self.board_size)]
@@ -102,7 +115,8 @@ class Game(ClearConsole):
             # Generate two random coordinates considering the size of the board
             x, y = random.randint(0, self.board_size -
                                   1), random.randint(0, self.board_size - 1)
-            # If the cell has already a bomb, skip and go to the top of the while loop
+            # If the cell has already a bomb, 
+            # skip and go to the top of the while loop
             if board[x][y] == BOMB:
                 continue
             # If the cell has no bomb, place it
@@ -158,9 +172,9 @@ class Game(ClearConsole):
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}" # noqa
             else:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}" # noqa
             print(line_to_print)
         print(self.x_separation)
         print(self.x_coordinates)
@@ -169,7 +183,7 @@ class Game(ClearConsole):
         """
         check the cell chosen by the user:
         """
-        if flag == False:
+        if not flag:
             self.shown.add((x, y))
             # If there is a bomb, game over
             if self.board[x][y] == BOMB:
@@ -221,10 +235,15 @@ class Game(ClearConsole):
             self.restart_game()
 
     def dig_or_flag_selector(self):
+        """
+        Selection menu
+        User decides to dig or place a flag
+        """
         self.clear_display()
         self.display_board(self.ui_board)
         starter = input(
-            Fore.WHITE + "-  Press Enter to dig\n-  Press F to place/remove a flag\n")
+            Fore.WHITE + "-  Press Enter to dig\n-  "
+            "Press F to place/remove a flag\n")
         if starter in ["F", "f", "flag"]:
             self.flag = True
             self.flag_alert = False
@@ -246,32 +265,42 @@ class Game(ClearConsole):
             print(f"Let's dig in! Watch out for mines and good luck! {CLOVER}")
         # insert row value or B to go back
         row_input = input(
-            "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
+            "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE +
+            " of the selected cell or " + Fore.RED +
+            "B" + Fore.WHITE + " to go back:\n")
         # if input not valid (not a number or B), enter again
         while not (row_input.isdigit() or row_input.lower() in ["b", "back"]):
             row_input = input(
-                Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
-        # If value is B or Back, a new user choice sequence starts while the current ends
+                Fore.RED + "Value not recognized, please enter a number\n" +
+                Fore.WHITE)
+        # If value is B or Back, a new user choice sequence
+        # starts while the current ends
         if row_input.lower() in ["b", "back"]:
             self.clear_display()
             self.display_board(self.ui_board)
             self.dig_or_flag_selector()
             self.get_coordinates(self.flag)
         # else, the input must be a number
-        else:    
+        else:
             x = int(row_input) - 1
-            # if number out of board range, enter again, otherwise we have our x coordinate
+            # if number out of board range, enter again,
+            # otherwise we have our x coordinate
             while x < 0 or x > self.board_size - 1:
                 x = int(input(
-                    Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                    Fore.RED + "The row does not exist, please enter a valid "
+                    "number\n" + Fore.WHITE)) - 1
             # insert column value or B to go back
             col_input = input(
-                "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
+                "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE +
+                " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +
+                " to go back:\n")
             # if input not valid (not a number or B), enter again
-            while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):
+            while not (col_input.isdigit() or col_input.lower() in ["b", "back"]): # noqa
                 col_input = input(
-                    Fore.RED + "Value not recognized, please enter a valid number\n" + Fore.WHITE)
-            # If value is B or Back, a new user choice sequence starts while the current ends
+                    Fore.RED + "Value not recognized, please enter a valid "
+                    "number\n" + Fore.WHITE)
+            # If value is B or Back, a new user choice sequence starts
+            # while the current ends
             if col_input.lower() in ["b", "back"]:
                 self.clear_display()
                 self.display_board(self.ui_board)
@@ -280,22 +309,25 @@ class Game(ClearConsole):
             # else, the input must be a number
             else:
                 y = int(col_input) - 1
-                # if number out of board range, enter again, otherwise we have our y coordinate
+                # if number out of board range, enter again,
+                # otherwise we have our y coordinate
                 while y < 0 or y > self.board_size - 1 or y == "":
                     y = int(input(
-                        Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
-                # if the user wants to dig        
+                        Fore.RED + "The column does not exist, please enter a "
+                        "valid number\n" + Fore.WHITE)) - 1
+                # if the user wants to dig
                 if not flag:
                     # If there is a flag, print alert to remove it first
                     if self.ui_board[x][y] == FLAG:
-                        print(Fore.RED + "\nPlease remove the flag before digging")
+                        print(Fore.RED + "\nPlease remove the flag before digging") # noqa
                         input("click Enter to continue")
                         self.flag_alert = True
                         self.clear_display()
                         self.display_board(self.ui_board)
                         self.dig_or_flag_selector()
                         self.get_coordinates(self.flag)
-                    # if there is not a flag, show underlying cell via self.show function
+                    # if there is not a flag, show underlying cell
+                    # via self.show function
                     else:
                         self.flag_alert = False
                         self.clear_display()
