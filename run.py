@@ -3,7 +3,7 @@ import random
 from mixins import ClearConsole
 
 """
-Assign ASCII icons code to variables 
+Assign ASCII icons code to variables
 """
 BOMB = '\U0001F4A5'
 BLANK_SQUARE = '\U0001F532'
@@ -18,7 +18,7 @@ class Game(ClearConsole):
 
     def __init__(self):
         """
-        Setting variables 
+        Setting variables
         """
         self.ui_board = []
         self.x_coordinates = []
@@ -27,6 +27,8 @@ class Game(ClearConsole):
         self.victory = False
         self.flag_alert = False
         self.flag = False
+        self.board_size = ""
+        self.bomb_num = ""
 
     def initial_screen(self):
         """"
@@ -34,17 +36,17 @@ class Game(ClearConsole):
         insert his name
         """
         print("""
-                     __  __ _                         
-                    |  \/  (_)                        
-                    | \  / |_ _ __   ___              
-               _____| |\/| | | '_ \ / _ \             
-              / ____| |  | | | | | |  __/             
-             | (____|_|  |_|_|_| |_|\___|_   ___ _ __ 
+                     __  __ _
+                    |  \/  (_)
+                    | \  / |_ _ __   ___
+               _____| |\/| | | '_ \ / _ |
+              / ____| |  | | | | | |  __/
+             | (____|_|  |_|_|_| |_|\___|_   ___ _ __
               \___ \ \ /\ / / _ \/ _ \ '_ \ / _ \ '__|
-              ____) \ V  V /  __/  __/ |_) |  __/ |   
-             |_____/ \_/\_/ \___|\___| .__/ \___|_|   
-                                     | |              
-                                     |_|               
+              ____) \ V  V /  __/  __/ |_) |  __/ |
+             |_____/ \_/\_/ \___|\___| .__/ \___|_|
+                                     | |
+                                     |_|
             """)
         global username
         # ask to enter a username until it is done
@@ -103,7 +105,7 @@ class Game(ClearConsole):
         """
         Create board arrays with none values
         Place bombs, represented by character *,
-        at random coordinates in the board 
+        at random coordinates in the board
         """
         board = [[None for a in range(self.board_size)]
                  for b in range(self.board_size)]
@@ -115,7 +117,7 @@ class Game(ClearConsole):
             # Generate two random coordinates considering the size of the board
             x, y = random.randint(0, self.board_size -
                                   1), random.randint(0, self.board_size - 1)
-            # If the cell has already a bomb, 
+            # If the cell has already a bomb,
             # skip and go to the top of the while loop
             if board[x][y] == BOMB:
                 continue
@@ -137,7 +139,7 @@ class Game(ClearConsole):
 
     def get_near_bombs_num(self, x, y):
         """
-        iterate through the 8 adiacent cells 
+        iterate through the 8 adiacent cells
         """
         near_bombs_num = 0
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
@@ -172,9 +174,9 @@ class Game(ClearConsole):
         # stack board arrays
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}" # noqa
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
             else:
-                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}" # noqa
+                line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
             print(line_to_print)
         print(self.x_separation)
         print(self.x_coordinates)
@@ -295,7 +297,7 @@ class Game(ClearConsole):
                 " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +
                 " to go back:\n")
             # if input not valid (not a number or B), enter again
-            while not (col_input.isdigit() or col_input.lower() in ["b", "back"]): # noqa
+            while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):  # noqa
                 col_input = input(
                     Fore.RED + "Value not recognized, please enter a valid "
                     "number\n" + Fore.WHITE)
@@ -319,7 +321,7 @@ class Game(ClearConsole):
                 if not flag:
                     # If there is a flag, print alert to remove it first
                     if self.ui_board[x][y] == FLAG:
-                        print(Fore.RED + "\nPlease remove the flag before digging") # noqa
+                        print(Fore.RED + "\nPlease remove the flag before digging")  # noqa
                         input("click Enter to continue")
                         self.flag_alert = True
                         self.clear_display()
