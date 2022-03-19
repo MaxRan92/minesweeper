@@ -182,7 +182,7 @@ To do so, first type ```pip3 install -r requirements.txt```, so that all the req
 Then, type ```python3 run.py``` to run the program on the terminal.
 
 
-##Credits and Ackowledgments
+## Credits and Ackowledgments
 
 - First of all, I am greetful towards my mentor Malia: her experience and competence are very useful and inspirational. 
 - The code structure and logic is inspired to this short but useful [Video](https://www.youtube.com/watch?v=Fjw7Lc9zlyU).
