@@ -11,11 +11,11 @@ MineSweeper is a single-player puzzle video game. The objective of the game is t
 
 
 ## How To Play
-- Insert username
-- The user can view the rules or directly play
-- The user chooses a difficulty level (easy, medium, hard)
-- The user can decide to place a flag or dig a cell
-- Once all the empty cells (without mines) are dug, the player wins
+Mines are scattered throughout a board, which is divided into cells. Cells have three states: non displayed, displayed and flagged. A non displayed cell is blank and can be displayed, while an already displayed cell is exposed. Flagged cells are those marked by the player to indicate a potential mine location.
+The player select a cell to display it. If a player displays a mined cell, the game ends. Otherwise, the cell displays either a number, indicating the number of mines adjacent to it, or a black tile (represented by a clover), and all adjacent non-mined cells will automatically be uncovered. 
+The player can also flag a cell, causing a flag to appear on it. Flagged cells are still considered covered, and a player can select them to display them, although they must first be unflagged.
+To win the game, players must uncover all non-mine cells, at which point, the timer is stopped. 
+Flagging all the mined cells is not required.
 
 ## Features 
 
@@ -170,10 +170,11 @@ The game is deployed on Heroku and the process involved is the following:
   ![Connect Github](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-connect-github.png)
 
   - From here you can decide if deploy automatically on Heroku (i.e. each time you commit a change) or manually. I chose the second one for better control over the final output
+  - Click on deploy and wait some seconds: a view button will appear and clicking on it you will see your program deployed!
 
   ![Deploy](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-deploy.png)
 
-  - Click on deploy and wait some seconds: a view button will appear and clicking on it you will see your program deployed!
+
 
 ### Gitpod
 Is it also possible to deploy the project on github and make it run on its terminal.
@@ -184,5 +185,5 @@ Then, type ```python3 run.py``` to run the program on the terminal.
 ##Credits and Ackowledgments
 
 - First of all, I am greetful towards my mentor Malia: her experience and competence are very useful and inspirational. 
-- The code structure and logic is inspired to this short but useful [Video](https://www.youtube.com/watch?v=Fjw7Lc9zlyU)
-- Flowchart is made on this [Site](https://app.diagrams.net/)
+- The code structure and logic is inspired to this short but useful [Video](https://www.youtube.com/watch?v=Fjw7Lc9zlyU).
+- Flowchart is made on this [Site](https://app.diagrams.net/).
