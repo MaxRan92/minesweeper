@@ -233,52 +233,60 @@ class Game(ClearConsole):
 
     def get_coordinates(self, flag):
         """
-        Docstring to be inserted
+        Function to get the user's coordinates inputs
+        Loops until a valid input is entered
+        Allows to go back to dig_or_flag_selector
         """
         self.clear_display()
         self.display_board(self.ui_board)
+        # Print proper text according to the dig or flag user choice
         if flag:
             print(f"Let's place a flag! {FLAG}")
         else:
             print(f"Let's dig in! Watch out for mines and good luck! {CLOVER}")
-        # insert row value
+        # insert row value or B to go back
         row_input = input(
             "insert the " + Fore.CYAN + "ROW NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
-        # if value not a digit or B, enter again
+        # if input not valid (not a number or B), enter again
         while not (row_input.isdigit() or row_input.lower() in ["b", "back"]):
             row_input = input(
                 Fore.RED + "Value not recognized, please enter a number\n" + Fore.WHITE)
+        # If value is B or Back, a new user choice sequence starts while the current ends
         if row_input.lower() in ["b", "back"]:
             self.clear_display()
             self.display_board(self.ui_board)
             self.dig_or_flag_selector()
             self.get_coordinates(self.flag)
+        # else, the input must be a number
         else:    
             x = int(row_input) - 1
-            # if value out of range, enter again
+            # if number out of board range, enter again, otherwise we have our x coordinate
             while x < 0 or x > self.board_size - 1:
                 x = int(input(
                     Fore.RED + "The row does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
-            # insert row value
+            # insert column value or B to go back
             col_input = input(
                 "insert the " + Fore.YELLOW + "COLUMN NUMBER" + Fore.WHITE + " of the selected cell or " + Fore.RED + "B" + Fore.WHITE +" to go back:\n")
-            # if value not a digit or B, enter again
+            # if input not valid (not a number or B), enter again
             while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):
                 col_input = input(
                     Fore.RED + "Value not recognized, please enter a valid number\n" + Fore.WHITE)
+            # If value is B or Back, a new user choice sequence starts while the current ends
             if col_input.lower() in ["b", "back"]:
                 self.clear_display()
                 self.display_board(self.ui_board)
                 self.dig_or_flag_selector()
                 self.get_coordinates(self.flag)
+            # else, the input must be a number
             else:
                 y = int(col_input) - 1
-                # if value out of range, enter again
-                while y < 0 or y > self.board_size - 1:
+                # if number out of board range, enter again, otherwise we have our y coordinate
+                while y < 0 or y > self.board_size - 1 or y == "":
                     y = int(input(
                         Fore.RED + "The column does not exist, please enter a valid number\n" + Fore.WHITE)) - 1
+                # if the user wants to dig        
                 if not flag:
-                    # If there is a flag, print alert
+                    # If there is a flag, print alert to remove it first
                     if self.ui_board[x][y] == FLAG:
                         print(Fore.RED + "\nPlease remove the flag before digging")
                         input("click Enter to continue")
@@ -287,10 +295,12 @@ class Game(ClearConsole):
                         self.display_board(self.ui_board)
                         self.dig_or_flag_selector()
                         self.get_coordinates(self.flag)
+                    # if there is not a flag, show underlying cell via self.show function
                     else:
                         self.flag_alert = False
                         self.clear_display()
                         self.show(x, y, flag)
+                # if the user wants to put a flag, do it via self.show function
                 else:
                     self.clear_display()
                     self.show(x, y, flag)
