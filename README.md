@@ -14,11 +14,14 @@ MineSweeper is a single-player puzzle video game. The objective of the game is t
 
 
 ## How To Play
-Mines are scattered throughout a board, which is divided into cells. Cells have three states: non displayed, displayed and flagged. A non displayed cell is blank and can be displayed, while an already displayed cell is exposed. Flagged cells are those marked by the player to indicate a potential mine location.
-The player select a cell to display it. If a player displays a mined cell, the game ends. Otherwise, the cell displays either a number, indicating the number of mines adjacent to it, or a black tile (represented by a clover), and all adjacent non-mined cells will automatically be uncovered. 
-The player can also flag a cell, causing a flag to appear on it. Flagged cells are still considered covered, and a player can select them to display them, although they must first be unflagged.
-To win the game, players must uncover all non-mine cells, at which point, the timer is stopped. 
-Flagging all the mined cells is not required.
+- Mines are scattered throughout a board, which is divided into cells. Cells have three states: non displayed, displayed and flagged. 
+- A non displayed cell is blank and can be displayed, while an already displayed cell is exposed. 
+- Flagged cells are those marked by the player to indicate a potential mine location.
+- The player select a cell to display it. If a player displays a mined cell, the game ends. Otherwise, the cell displays either a number, indicating the number of mines adjacent to it, or a black tile (represented by a clover), and all adjacent non-mined cells will automatically be uncovered.
+The first dig is always safe.
+- The player can also flag a cell, causing a flag to appear on it. Flagged cells are still considered covered, and a player can select them to display them, although they must first be unflagged.
+- To win the game, players must uncover all non-mine cells, at which point, the timer is stopped. Flagging all the mined cells is not required.
+
 
 ## Features 
 
@@ -147,6 +150,16 @@ Manual testing has been implemented in all the phases of the project. Here I sum
         # contain bombs are shown
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
 
+4) **To avoid bomb at the first dig**
+  As per official rules, the first dig should not return a bomb. That would be frustrating!
+  I was able to implement it easily with the code below: if the shown set has a lenght of zero, meaning no cells have been dug, and the player is so unfortunate to dig   a BOMB at his first trial, keep recreating a table until that cell is safe.
+  
+        if len(self.shown) == 0:
+          while self.board[x][y] == BOMB:
+              # creates new random board
+              self.board = self.create_new_board()
+              # insert values in the underlying board
+              self.insert_values()
 
 ## Deployments
 
