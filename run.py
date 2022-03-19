@@ -301,7 +301,7 @@ class Game():
             if self.gameover and not self.flag_alert:
                 ClearConsole.clear_display()
                 self.display_board(self.ui_board)
-                print("\nOuch, there was a mine!! \n\n" +
+                print("Ouch, there was a mine!! \n" +
                       BOMB + BOMB + Fore.RED + " GAME OVER! " + Fore.WHITE +
                       BOMB + BOMB)
                 self.restart_game()
@@ -443,6 +443,7 @@ class Game():
         restart = input("\nDo you want to play again? (y/n)\n")
         if restart in ["y", "yes"]:
             # restart all the function needed for a new game
+            ClearConsole.clear_display()
             self.gameover = False
             self.victory = False
             self.shown = set()
