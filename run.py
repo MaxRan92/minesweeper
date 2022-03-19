@@ -13,7 +13,31 @@ FLAG = '\U0001F6A9'
 
 class Game(ClearConsole):
     """
-    Create the gaming board
+    Class that contains the following Methods:
+    1) initial_screen()
+        Welcome screen with logo and username input
+    2) tutorial()
+        Prints the rules of the game
+    3) get_difficulty_level()
+        Ask the level of difficulty
+    4) create_new_board()
+        Creates a board with random placed mines
+    5) insert_values()
+        In free cells, insert number of adjacent bombs
+    6) get_near_bombs_num()
+        Calculate the number of adjacent bombs for a cell
+    7) display_board()
+        Function to display a properly formatted board
+    8) show()
+        Discloses the cell underlying object
+    9) run_game()
+        Loop that keeps running until the user wins or loose
+    10) dig_or_flag_selector()
+        Asks the user to dig or place a flag
+    11) get_coordinates() 
+        Allows the user to insert coordinates of the chosen cell
+    12) restart_game()
+        Allows user to restart the game once he wins or loose
     """
 
     def __init__(self):
