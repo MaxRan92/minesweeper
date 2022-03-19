@@ -293,6 +293,8 @@ class Game():
                 self.display_board(self.ui_board)
             # if gameover and not flag_alert, print it
             if self.gameover and not self.flag_alert:
+                ClearConsole.clear_display()
+                self.display_board(self.ui_board)
                 print("\nOuch, there was a mine!! \n\n" +
                       BOMB + BOMB + Fore.RED + " GAME OVER! " + Fore.WHITE +
                       BOMB + BOMB)
