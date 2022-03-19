@@ -150,11 +150,29 @@ Manual testing has been implemented in all the phases of the project. Here I sum
 ### Heroku
 The game is deployed on Heroku and the process involved is the following:
   - Log in and create a new app with proper name and region
+  
+  ![Create App](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-create-app.png)
+  
   - Click on the app and go to settings tab
+
+  ![Settings](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-settings.png)
+
   - Go to the Config Vars section and insert PORT with a value of 8000
+
+  ![Config Vars](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-config-vars.png)
+
   - In the section below, called Buildpack, you must add Python and Nodejs (in this precise order)
+
+  ![Buildpack](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-buildpacks.png)
+
   - Go to Deploy Tab. In the Deployment method section connect your Github account. Entering your repository name, your project will automatically be connected to Heroku
+
+  ![Connect Github](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-connect-github.png)
+
   - From here you can decide if deploy automatically on Heroku (i.e. each time you commit a change) or manually. I chose the second one for better control over the final output
+
+  ![Deploy](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/heroku-deploy.png)
+
   - Click on deploy and wait some seconds: a view button will appear and clicking on it you will see your program deployed!
 
 ### Gitpod
