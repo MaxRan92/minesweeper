@@ -1,6 +1,6 @@
 from colorama import Fore
 import random
-from mixins import ClearConsole
+import os
 
 
 # Assigning ASCII icons code to constants
@@ -10,7 +10,7 @@ CLOVER = '\U0001F340'
 FLAG = '\U0001F6A9'
 
 
-class Game(ClearConsole):
+class Game():
     """
     Class that contains the following Methods:
     1) initial_screen()
@@ -33,7 +33,7 @@ class Game(ClearConsole):
         Loop that keeps running until the user wins or loose
     10) dig_or_flag_selector()
         Asks the user to dig or place a flag
-    11) get_coordinates() 
+    11) get_coordinates()
         Allows the user to insert coordinates of the chosen cell
     12) restart_game()
         Allows user to restart the game once he wins or loose
@@ -43,6 +43,7 @@ class Game(ClearConsole):
         """
         Setting main parameters
         """
+        self.username = ""
         self.board = ""
         self.board_size = ""
         self.bomb_num = ""
@@ -62,17 +63,18 @@ class Game(ClearConsole):
         insert his name
         """
         print("""
-                     __  __ _
-                    |  \/  (_)
-                    | \  / |_ _ __   ___
-               _____| |\/| | | '_ \ / _ |
-              / ____| |  | | | | | |  __/
-             | (____|_|  |_|_|_| |_|\___|_   ___ _ __
-              \___ \ \ /\ / / _ \/ _ \ '_ \ / _ \ '__|
-              ____) \ V  V /  __/  __/ |_) |  __/ |
-             |_____/ \_/\_/ \___|\___| .__/ \___|_|
-                                     | |
-                                     |_|
+                        ███╗   ███╗██╗███╗   ██╗███████╗
+                        ████╗ ████║██║████╗  ██║██╔════╝
+                        ██╔████╔██║██║██╔██╗ ██║█████╗
+                        ██║╚██╔╝██║██║██║╚██╗██║██╔══╝
+                        ██║ ╚═╝ ██║██║██║ ╚████║███████╗
+                        ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝
+            ███████╗██╗    ██╗███████╗███████╗██████╗ ███████╗██████╗
+            ██╔════╝██║    ██║██╔════╝██╔════╝██╔══██╗██╔════╝██╔══██╗
+            ███████╗██║ █╗ ██║█████╗  █████╗  ██████╔╝█████╗  ██████╔╝
+            ╚════██║██║███╗██║██╔══╝  ██╔══╝  ██╔═══╝ ██╔══╝  ██╔══██╗
+            ███████║╚███╔███╔╝███████╗███████╗██║     ███████╗██║  ██║
+            ╚══════╝ ╚══╝╚══╝ ╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝
             """)
         # ask to enter a username until it is done
         print("Welcome to Minesweeper!\nPlease insert your name")
@@ -80,9 +82,9 @@ class Game(ClearConsole):
         while len(self.username) == 0:
             print("It looks like you haven't typed anything, please enter your name!")  # noqa
             self.username = input().strip()
-        self.clear_display()
+        ClearConsole.clear_display()
         # return hello message
-        print("\nHi " + Fore.GREEN + f"{self.username}!" + Fore.WHITE + " Nice to meet you!\n") # noqa
+        print("\nHi " + Fore.GREEN + f"{self.username}!" + Fore.WHITE + " Nice to meet you!\n")  # noqa
 
     def tutorial(self):
         """
@@ -101,9 +103,9 @@ class Game(ClearConsole):
             "safe spots in the field without any mistake, you win!\n\n ")
         # ask to start the game
         input("Press enter to start the game!\n")
-        self.clear_display()
+        ClearConsole.clear_display()
         self.get_difficulty_level()
-        self.clear_display()
+        ClearConsole.clear_display()
         self.run_game()
 
     def get_difficulty_level(self):
@@ -257,7 +259,7 @@ class Game(ClearConsole):
                     # loop through the 8 adjacent cells and show all of them
                     # if not already shown before
                     for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-                        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1): # noqa
+                        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
                             if (r, c) in self.shown:
                                 continue
                             self.show(r, c, flag)
@@ -271,7 +273,7 @@ class Game(ClearConsole):
             # else it means it is already dug. Notify it.
             else:
                 self.display_board(self.ui_board)
-                print(Fore.RED + "\nCannot place a flag in an already shown spot!\n" + Fore.WHITE) # noqa
+                print(Fore.RED + "\nCannot place a flag in an already shown spot!\n" + Fore.WHITE)  # noqa
                 input("Press enter to continue")
 
     def run_game(self):
@@ -286,7 +288,7 @@ class Game(ClearConsole):
         # contain bombs are shown
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
             # if there is not a flag_alert (see get_coordinates function),
-            # show the ui board 
+            # show the ui board
             if not self.flag_alert:
                 self.display_board(self.ui_board)
             # if gameover and not flag_alert, print it
@@ -300,12 +302,12 @@ class Game(ClearConsole):
             # and select the coordinates
             else:
                 self.dig_or_flag_selector()
-                self.clear_display()
+                ClearConsole.clear_display()
                 self.get_coordinates(self.flag)
-        # if all the cells that do not contain bombs are shown, you win        
+        # if all the cells that do not contain bombs are shown, you win
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
-            print("\n" + CLOVER + CLOVER + "CONGRATULATIONS! You cleared all the field!" + CLOVER + CLOVER) # noqa
+            print("\n" + CLOVER + CLOVER + "CONGRATULATIONS! You cleared all the field!" + CLOVER + CLOVER)  # noqa
             self.victory = True
             self.restart_game()
 
@@ -314,7 +316,7 @@ class Game(ClearConsole):
         Selection menu
         User decides to dig or place a flag
         """
-        self.clear_display()
+        ClearConsole.clear_display()
         self.display_board(self.ui_board)
         starter = input(
             Fore.WHITE + "-  Press Enter to dig\n-  "
@@ -330,7 +332,7 @@ class Game(ClearConsole):
         Loops until a valid input is entered
         Allows to go back to dig_or_flag_selector
         """
-        self.clear_display()
+        ClearConsole.clear_display()
         self.display_board(self.ui_board)
         # Print proper text according to the dig or flag user choice
         if flag:
@@ -350,7 +352,7 @@ class Game(ClearConsole):
         # If value is B or Back, a new user choice sequence
         # starts while the current ends
         if row_input.lower() in ["b", "back"]:
-            self.clear_display()
+            ClearConsole.clear_display()
             self.display_board(self.ui_board)
             self.dig_or_flag_selector()
             self.get_coordinates(self.flag)
@@ -362,7 +364,7 @@ class Game(ClearConsole):
             while x < 0 or x > self.board_size - 1:
                 try:
                     x = int(input(
-                        Fore.RED + "The row does not exist, please enter a valid "
+                        Fore.RED + "The row does not exist, please enter a valid "  # noqa
                         "number\n" + Fore.WHITE)) - 1
                 except (TypeError, ValueError):
                     continue
@@ -379,7 +381,7 @@ class Game(ClearConsole):
             # If value is B or Back, a new user choice sequence starts
             # while the current ends
             if col_input.lower() in ["b", "back"]:
-                self.clear_display()
+                ClearConsole.clear_display()
                 self.display_board(self.ui_board)
                 self.dig_or_flag_selector()
                 self.get_coordinates(self.flag)
@@ -391,7 +393,7 @@ class Game(ClearConsole):
                 while y < 0 or y > self.board_size - 1:
                     try:
                         y = int(input(
-                            Fore.RED + "The column does not exist, please enter a "
+                            Fore.RED + "The column does not exist, please enter a "  # noqa
                             "valid number\n" + Fore.WHITE)) - 1
                     except (TypeError, ValueError):
                         continue
@@ -402,7 +404,7 @@ class Game(ClearConsole):
                         print(Fore.RED + "\nPlease remove the flag before digging")  # noqa
                         input("click Enter to continue")
                         self.flag_alert = True
-                        self.clear_display()
+                        ClearConsole.clear_display()
                         self.display_board(self.ui_board)
                         self.dig_or_flag_selector()
                         self.get_coordinates(self.flag)
@@ -410,11 +412,11 @@ class Game(ClearConsole):
                     # via self.show function
                     else:
                         self.flag_alert = False
-                        self.clear_display()
+                        ClearConsole.clear_display()
                         self.show(x, y, flag)
                 # if the user wants to put a flag, do it via self.show function
                 else:
-                    self.clear_display()
+                    ClearConsole.clear_display()
                     self.show(x, y, flag)
 
     def restart_game(self):
@@ -424,16 +426,35 @@ class Game(ClearConsole):
         restart = input("\nDo you want to play again? (y/n)\n")
         if restart in ["y", "yes"]:
             # restart all the function needed for a new game
-            self.clear_display()
-            self.__init__()
+            self.gameover = False
+            self.victory = False
+            self.shown = set()
+            ClearConsole.clear_display()
             self.get_difficulty_level()
-            self.clear_display()
+            ClearConsole.clear_display()
             self.run_game()
         else:
             # exit the game
-            self.clear_display()
+            ClearConsole.clear_display()
             self.display_board(self.ui_board)
             print(Fore.GREEN + f"\n\nThank you for playing {self.username}!\n\n" + Fore.WHITE)  # noqa
+
+
+class ClearConsole():
+    """
+    Function that clears the console
+    """
+    # From https://www.delftstack.com/howto/python/python-clear-console/
+    @staticmethod
+    def clear_display():
+        """"
+        Clears the display
+        """
+        command = 'clear'
+        if os.name in (
+                'nt', 'dos'):  # If Machine is running on Windows, use cls
+            command = 'cls'
+        os.system(command)
 
 
 def main():
@@ -448,15 +469,15 @@ def main():
     while True:
         user_selection = input(Fore.WHITE + "Please select 'Play' to start the game or 'Tutorial' for the guide.\n \t p: play \n \t t: tutorial\n")  # noqa
         if user_selection in ["play", "p", "yes", "y"]:
-            game.clear_display()
+            ClearConsole.clear_display()
             game.get_difficulty_level()
-            game.clear_display()
+            ClearConsole.clear_display()
             game.run_game()
         elif user_selection in ["tutorial", "t"]:
-            game.clear_display()
+            ClearConsole.clear_display()
             game.tutorial()
         else:
-            game.clear_display()
+            ClearConsole.clear_display()
             print(
                 Fore.RED + f"Hey {game.username}, your input is not recognized! \n")  # noqa
         if game.gameover or game.victory:
