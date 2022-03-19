@@ -164,7 +164,7 @@ Manual testing has been implemented in all the phases of the project. Here I sum
         # contain bombs are shown
         while len(self.shown) < self.board_size ** 2 - self.bomb_num:
 
-4) **To avoid bomb at the first dig**
+4) **To avoid a bomb at the first dig**
 
 
   As per official rules, the first dig should not return a bomb. That would be frustrating!
