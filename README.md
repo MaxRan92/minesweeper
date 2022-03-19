@@ -86,5 +86,37 @@ Moreover, use of ASCII logo and emoji help to improve the aseptic black and whit
 11) **run_game()**: Loop that keeps running until the user wins or loses
 12) **restart_game()**: Allows the user to restart the game once he wins or loose
 
+## Testing
 
+## Validator Testing - PEP8 
 
+- The code is PEP8 validated, however manual intervention was necessary to meet all the requirements.
+  Most of the alerts were regarding the number of blank lines between methods, trailing whitespaces to be deleted and too long lines.
+  About this last alert, I included '  # noqa' on those parts in which shorter than 79 characters lines may lead to bad readibility
+![Validation Errors](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/pep8.png)
+
+## Manual Testing
+Manual testing has been implemented in all the phases of the project. Here I summarize and document the most significant issues encountered:
+
+1) **Row/Column input handling**
+  The code below comes from the 8) **get_coordinates()** method. As explained by the comments, the code does the following steps:
+  - takes a row input
+  - If the input is B (back), the code leads to the dir_or_flag_selection method.
+  - If the input is a number, that number should be the row index.
+  
+  When the user inputs a number that is out of the board index range, an alert pops up, asking for a number included between the ranges.
+  The main issue was that, if in this second input request the user simply writes a word or just press enter, it would compare a str with "<" and ">" operator conditions (which ensure the number is between the range). And this leads to ValueError and TypeError.
+  The issue was solved including a try: except: condition as follows:
+
+            # if number out of board range, enter again,
+            # otherwise we have our x coordinate
+            while x < 0 or x > self.board_size - 1:
+                try:
+                    ClearConsole.clear_display()
+                    self.display_board(self.ui_board)
+                    x = int(input(
+                        Fore.RED + "The row does not exist, please enter a valid "  # noqa
+                        "number\n" + Fore.WHITE)) - 1
+                except (TypeError, ValueError):
+                    continue
+                
