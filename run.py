@@ -354,8 +354,11 @@ class Game():
             "B" + Fore.WHITE + " to go back:\n")
         # if input not valid (not a number or B), enter again
         while not (row_input.isdigit() or row_input.lower() in ["b", "back"]):
+            ClearConsole.clear_display()
+            self.display_board(self.ui_board)
             row_input = input(
-                Fore.RED + "Value not recognized, please enter a number\n" +
+                Fore.RED + "Value not recognized, please enter a valid"
+                " number\n" +
                 Fore.WHITE)
         # If value is B or Back, a new user choice sequence
         # starts while the current ends
@@ -385,6 +388,8 @@ class Game():
                 " to go back:\n")
             # if input not valid (not a number or B), enter again
             while not (col_input.isdigit() or col_input.lower() in ["b", "back"]):  # noqa
+                ClearConsole.clear_display()
+                self.display_board(self.ui_board)
                 col_input = input(
                     Fore.RED + "Value not recognized, please enter a valid "
                     "number\n" + Fore.WHITE)
