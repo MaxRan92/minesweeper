@@ -26,20 +26,20 @@ class Game():
         Ask the level of difficulty
     4) create_new_board()
         Creates a board with random placed mines
-    5) insert_values()
-        In free cells, insert number of adjacent bombs
-    6) get_near_bombs_num()
-        Calculate the number of adjacent bombs for a cell
-    7) display_board()
+    5) display_board()
         Function to display a properly formatted board
-    8) show()
-        Discloses the cell underlying object
-    9) run_game()
-        Loop that keeps running until the user wins or loose
-    10) dig_or_flag_selector()
+    6) insert_values()
+        In free cells, insert number of adjacent bombs
+    7) dig_or_flag_selector()
         Asks the user to dig or place a flag
-    11) get_coordinates()
+    8) get_coordinates()
         Allows the user to insert coordinates of the chosen cell
+    9) show()
+        Discloses the cell underlying object
+    10) get_near_bombs_num()
+        Calculate the number of adjacent bombs for a cell
+    11) run_game()
+        Loop that keeps running until the user wins or loose
     12) restart_game()
         Allows user to restart the game once he wins or loose
     """
@@ -122,7 +122,8 @@ class Game():
         """
         # asks to insert difficulty level
         difficulty = input(
-            "\nPlease select a difficulty level \n\nh: Hard \nm: Medium \ne: Easy\n").lower()
+            "\nPlease select a difficulty level \n\nh: Hard \nm: Medium "
+            "\ne: Easy\n").lower()
         while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
             ClearConsole.clear_display()
             print(Fore.RED + "\nInput not recognized\n" + Fore.WHITE)
@@ -168,35 +169,6 @@ class Game():
             bomb_counter += 1
         return board
 
-    def insert_values(self):
-        """
-        for each cell that has no bomb, calls the get_near_bombs_num()
-        function that assignes a value representing
-        the number of bombs in the cells next to it
-        """
-        for x in range(self.board_size):
-            for y in range(self.board_size):
-                if self.board[x][y] == BOMB:
-                    continue
-                self.board[x][y] = self.get_near_bombs_num(x, y)
-
-    def get_near_bombs_num(self, x, y):
-        """
-        iterate through the 8 adiacent cells
-        and count the number of bombs
-        """
-        near_bombs_num = 0
-        # two for loops to get the coordinates of all adjacent cells
-        for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-            for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
-                # do not consider the dug cell
-                if r == x and c == y:
-                    continue
-                # if adjacent cell has a bomb, add 1 to the counter
-                if self.board[r][c] == BOMB:
-                    near_bombs_num += 1
-        return str(near_bombs_num)
-
     def display_board(self, board_to_show):
         """
         display board with format
@@ -233,95 +205,17 @@ class Game():
         print(self.x_separation)
         print(self.x_coordinates)
 
-    def show(self, x, y, flag):
+    def insert_values(self):
         """
-        check the cell chosen by the user and shows it,
-        enlarging the shown area on certain conditions
+        for each cell that has no bomb, calls the get_near_bombs_num()
+        function that assignes a value representing
+        the number of bombs in the cells next to it
         """
-        # if user is not placing/removing a flag
-        if not flag:
-            # if cell already dug, notify the user and restart
-            # the coordinates input
-            if (x, y) in self.shown:
-                self.display_board(self.ui_board)
-                print(Fore.RED + "\nCell alread dug!" + Fore.WHITE)
-                input("\nPress ENTER to continue")
-                self.get_coordinates(flag)
-            else:
-                # Adds the shown cell as tuple in a set
-                # Sets do not allow duplicate values, hence trying to dig
-                # the same cell multiple times won't change it
-                self.shown.add((x, y))
-                # If there is a bomb, show it in the ui board. Game over.
+        for x in range(self.board_size):
+            for y in range(self.board_size):
                 if self.board[x][y] == BOMB:
-                    self.ui_board[x][y] = self.board[x][y]
-                    self.gameover = True
-                # If there is one or more adjacent bomb (>0 value in the
-                # underlying board), show only that cell
-                elif int(self.board[x][y]) > 0:
-                    self.ui_board[x][y] = self.board[x][y]
-                # If there is no adjacent bomb (0 value in the underlying
-                # board), enlarge the shown area until you find a cell
-                # with adjacent bombs
-                elif int(self.board[x][y]) == 0:
-                    # place a clover emoji
-                    self.ui_board[x][y] = CLOVER
-                    # loop through the 8 adjacent cells and show all of them
-                    # if not already shown before
-                    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-                        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
-                            if (r, c) in self.shown:
-                                continue
-                            self.show(r, c, flag)
-        # if user is placing(removing) a flag, place(remove) it
-        # respectively if in that cell there is a blank_square(flag).
-        else:
-            if self.ui_board[x][y] == BLANK_SQUARE:
-                self.ui_board[x][y] = FLAG
-            elif self.ui_board[x][y] == FLAG:
-                self.ui_board[x][y] = BLANK_SQUARE
-            # else it means it is already dug. Notify it.
-            else:
-                self.display_board(self.ui_board)
-                print(Fore.RED + "\nCannot place a flag in an already shown spot!\n" + Fore.WHITE)  # noqa
-                input("Press enter to continue")
-
-    def run_game(self):
-        """
-        runs the game
-        """
-        # creates new random board
-        self.board = self.create_new_board()
-        # insert values in the underlying board
-        self.insert_values()
-        # loop that keeps running until all the cells that do not
-        # contain bombs are shown
-        while len(self.shown) < self.board_size ** 2 - self.bomb_num:
-            # if there is not a flag_alert (see get_coordinates function),
-            # show the ui board
-            if not self.flag_alert:
-                self.display_board(self.ui_board)
-            # if gameover and not flag_alert, print it
-            if self.gameover and not self.flag_alert:
-                ClearConsole.clear_display()
-                self.display_board(self.ui_board)
-                print("Ouch, there was a mine!! \n" +
-                      BOMB + BOMB + Fore.RED + " GAME OVER! " + Fore.WHITE +
-                      BOMB + BOMB)
-                self.restart_game()
-                break
-            # otherwise, let the user select dig/flag
-            # and select the coordinates
-            else:
-                self.dig_or_flag_selector()
-                ClearConsole.clear_display()
-                self.get_coordinates(self.flag)
-        # if all the cells that do not contain bombs are shown, you win
-        if len(self.shown) == self.board_size ** 2 - self.bomb_num:
-            self.display_board(self.ui_board)
-            print("\n" + CLOVER + CLOVER + "  CONGRATULATIONS! You cleared all the field!  " + CLOVER + CLOVER)  # noqa
-            self.victory = True
-            self.restart_game()
+                    continue
+                self.board[x][y] = self.get_near_bombs_num(x, y)
 
     def dig_or_flag_selector(self):
         """
@@ -441,6 +335,114 @@ class Game():
                 else:
                     ClearConsole.clear_display()
                     self.show(x, y, flag)
+
+    def show(self, x, y, flag):
+        """
+        check the cell chosen by the user and shows it,
+        enlarging the shown area on certain conditions
+        """
+        # if user is not placing/removing a flag
+        if not flag:
+            # if cell already dug, notify the user and restart
+            # the coordinates input
+            if (x, y) in self.shown:
+                self.display_board(self.ui_board)
+                print(Fore.RED + "\nCell alread dug!" + Fore.WHITE)
+                input("\nPress ENTER to continue")
+                self.get_coordinates(flag)
+            else:
+                # Adds the shown cell as tuple in a set
+                # Sets do not allow duplicate values, hence trying to dig
+                # the same cell multiple times won't change it
+                self.shown.add((x, y))
+                # If there is a bomb, show it in the ui board. Game over.
+                if self.board[x][y] == BOMB:
+                    self.ui_board[x][y] = self.board[x][y]
+                    self.gameover = True
+                # If there is one or more adjacent bomb (>0 value in the
+                # underlying board), show only that cell
+                elif int(self.board[x][y]) > 0:
+                    self.ui_board[x][y] = self.board[x][y]
+                # If there is no adjacent bomb (0 value in the underlying
+                # board), enlarge the shown area until you find a cell
+                # with adjacent bombs
+                elif int(self.board[x][y]) == 0:
+                    # place a clover emoji
+                    self.ui_board[x][y] = CLOVER
+                    # loop through the 8 adjacent cells and show all of them
+                    # if not already shown before
+                    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+                        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
+                            if (r, c) in self.shown:
+                                continue
+                            self.show(r, c, flag)
+        # if user is placing(removing) a flag, place(remove) it
+        # respectively if in that cell there is a blank_square(flag).
+        else:
+            if self.ui_board[x][y] == BLANK_SQUARE:
+                self.ui_board[x][y] = FLAG
+            elif self.ui_board[x][y] == FLAG:
+                self.ui_board[x][y] = BLANK_SQUARE
+            # else it means it is already dug. Notify it.
+            else:
+                self.display_board(self.ui_board)
+                print(Fore.RED + "\nCannot place a flag in an already shown spot!\n" + Fore.WHITE)  # noqa
+                input("Press enter to continue")
+
+    def get_near_bombs_num(self, x, y):
+        """
+        iterate through the 8 adiacent cells
+        and count the number of bombs
+        """
+        near_bombs_num = 0
+        # two for loops to get the coordinates of all adjacent cells
+        for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+            for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
+                # do not consider the dug cell
+                if r == x and c == y:
+                    continue
+                # if adjacent cell has a bomb, add 1 to the counter
+                if self.board[r][c] == BOMB:
+                    near_bombs_num += 1
+        return str(near_bombs_num)
+
+    def run_game(self):
+        """
+        runs the game
+        """
+        # creates new random board
+        self.board = self.create_new_board()
+        # insert values in the underlying board
+        self.insert_values()
+        # loop that keeps running until all the cells that do not
+        # contain bombs are shown
+        while len(self.shown) < self.board_size ** 2 - self.bomb_num:
+            # if there is not a flag_alert (see get_coordinates function),
+            # show the ui board
+            if not self.flag_alert:
+                self.display_board(self.ui_board)
+            # if gameover and not flag_alert, print it
+            if self.gameover and not self.flag_alert:
+                ClearConsole.clear_display()
+                self.display_board(self.ui_board)
+                print("Ouch, there was a mine!! \n" +
+                      BOMB + BOMB + Fore.RED + " GAME OVER! " + Fore.WHITE +
+                      BOMB + BOMB)
+                self.restart_game()
+                break
+            # otherwise, let the user select dig/flag
+            # and select the coordinates
+            else:
+                self.dig_or_flag_selector()
+                ClearConsole.clear_display()
+                self.get_coordinates(self.flag)
+        # if all the cells that do not contain bombs are shown, you win
+        if len(self.shown) == self.board_size ** 2 - self.bomb_num:
+            self.display_board(self.ui_board)
+            print("\n" + CLOVER + CLOVER + "  CONGRATULATIONS! You "
+            "cleared all the field!  " + CLOVER + CLOVER)  # noqa
+            self.victory = True
+            self.restart_game()
 
     def restart_game(self):
         """
