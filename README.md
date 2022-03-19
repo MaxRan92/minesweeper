@@ -76,7 +76,7 @@ Moreover, use of ASCII logo and emoji help to improve the aseptic black and whit
 
 ## Flow Chart 
 
-![FlowChart](https://github.com/MaxRan92/minesweeper/blob/main/docs/flowchart/flowchart.png)
+![FlowChart](https://github.com/MaxRan92/minesweeper/blob/main/docs/flowchart/full-flowchart.png)
 
 ## Main Methods
 1) **initial_screen()**: Welcome screen with logo and username input
