@@ -122,13 +122,13 @@ class Game():
         """
         # asks to insert difficulty level
         difficulty = input(
-            "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
+            "\nPlease select a difficulty level \n\nh: Hard \nm: Medium \ne: Easy\n").lower()
         while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
             ClearConsole.clear_display()
             print(Fore.RED + "\nInput not recognized\n" + Fore.WHITE)
             difficulty = input(
-                "Please select a difficulty level \nh:hard \nm:medium "
-                "\ne:easy\n").lower()
+                "Please select a difficulty level \n h: Hard \nm: Medium "
+                "\ne: Easy\n").lower()
 
         # each difficulty level has increasing number of cells and bombs
         if difficulty in ["h", "hard"]:
