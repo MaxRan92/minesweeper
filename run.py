@@ -216,9 +216,9 @@ class Game():
                     f"{' ' + Fore.YELLOW + str(a+1) + Fore.WHITE}")
             self.x_separation.append('---')
         self.x_coordinates = ' '.join(self.x_coordinates)
-        self.x_coordinates = '         ' + self.x_coordinates
+        self.x_coordinates = '             ' + self.x_coordinates
         self.x_separation = ' '.join(self.x_separation)
-        self.x_separation = '          ' + self.x_separation
+        self.x_separation = '              ' + self.x_separation
         print(self.x_coordinates)
         print(self.x_separation)
         # print stacked board horizontal lines,
@@ -226,9 +226,9 @@ class Game():
         # and spacing properly
         for r in range(self.board_size):
             if r < 9:
-                line_to_print = f"     {Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
+                line_to_print = f"         {Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
             else:
-                line_to_print = f"     {Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
+                line_to_print = f"         {Fore.CYAN + str(r+1) + Fore.WHITE + ' | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
             print(line_to_print)
         print(self.x_separation)
         print(self.x_coordinates)
