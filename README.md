@@ -149,13 +149,11 @@ Manual testing has been implemented in all the phases of the project. Here I sum
 
 ### Heroku
 The game is deployed on Heroku and the process involved is the following:
-  - Log in and go to settings tab
-  - Go to the Config Vars section
-  - In the Config Vars, insert PORT with a value of 8000
+  - Log in and create a new app with proper name and region
+  - Click on the app and go to settings tab
+  - Go to the Config Vars section and insert PORT with a value of 8000
   - In the section below, called Buildpack, you must add Python and Nodejs (in this precise order)
-  - Go to Deploy Tab
-  - Scroll down to Deployment method and connect your Github account
-  - Entering your repository name, your project will automatically be connected to Heroku
+  - Go to Deploy Tab. In the Deployment method section connect your Github account. Entering your repository name, your project will automatically be connected to Heroku
   - From here you can decide if deploy automatically on Heroku (i.e. each time you commit a change) or manually. I chose the second one for better control over the final output
   - Click on deploy and wait some seconds: a view button will appear and clicking on it you will see your program deployed!
 
