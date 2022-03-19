@@ -1,4 +1,7 @@
-# MineSweeeper
+# MineSweeper
+
+## Game Link
+The project is developed on Heroku, at the following [Link](https://mine-sweeper-app.herokuapp.com/)
 
 ## Author 
 Massimo Ranalli
