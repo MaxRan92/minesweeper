@@ -343,7 +343,7 @@ class Game():
         """
         # if user is not placing/removing a flag
         if not flag:
-            # if first cell, recreate table 
+            # if first cell, recreate table
             # until it is not a bomb
             if len(self.shown) == 0:
                 while self.board[x][y] == BOMB:
