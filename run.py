@@ -343,6 +343,14 @@ class Game():
         """
         # if user is not placing/removing a flag
         if not flag:
+            # if first cell, recreate table 
+            # until it is not a bomb
+            if len(self.shown) == 0:
+                while self.board[x][y] == BOMB:
+                    # creates new random board
+                    self.board = self.create_new_board()
+                    # insert values in the underlying board
+                    self.insert_values()
             # if cell already dug, notify the user and restart
             # the coordinates input
             if (x, y) in self.shown:
@@ -369,9 +377,9 @@ class Game():
                 elif int(self.board[x][y]) == 0:
                     # place a clover emoji
                     self.ui_board[x][y] = CLOVER
-                    # loop through the 8 adjacent cells and show all of them
-                    # if not already shown before
-                    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+                    # loop through the 8 adjacent cells and show all
+                    # of them if not already shown before
+                    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):  # noqa
                         for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
                             if (r, c) in self.shown:
                                 continue
