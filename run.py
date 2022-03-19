@@ -99,14 +99,14 @@ class Game():
         """
         # print the rules
         print(
-            " - RULES OF THE GAME - \n\n\n The field has several mines"
-            " under its ground and your task is to identify and isolate them"
-            ", digging only the safe spots! \n\n Every time you dig in a safe"
+            " - RULES OF THE GAME - \n\n\nThe field has several mines"
+            " under its ground and your task is to identify and \nisolate them"
+            ", digging only the safe spots! \n\nEvery time you dig in a safe"
             " spot, a number will appear representing the number of "
             "surrounding mines: with a little bit of logic, you will "
-            "be able to localize them. \n\n When you localize a mine,"
+            "be able to localize them. \n\nWhen you localize a mine,"
             " place a flag over its cell as a reminder, so that you "
-            "will not dig there by mistake. \n\n If you dig all the "
+            "will not dig there by mistake! \n\nIf you dig all the "
             "safe spots in the field without any mistake, you win!\n\n ")
         # ask to start the game
         input("Press enter to start the game!\n")
