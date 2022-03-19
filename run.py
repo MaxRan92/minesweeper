@@ -2,9 +2,8 @@ from colorama import Fore
 import random
 from mixins import ClearConsole
 
-"""
-Assign ASCII icons code to variables
-"""
+
+# Assigning ASCII icons code to constants
 BOMB = '\U0001F4A5'
 BLANK_SQUARE = '\U0001F532'
 CLOVER = '\U0001F340'
@@ -42,7 +41,7 @@ class Game(ClearConsole):
 
     def __init__(self):
         """
-        Setting variables
+        Setting main parameters
         """
         self.ui_board = []
         self.x_coordinates = []
@@ -72,15 +71,14 @@ class Game(ClearConsole):
                                      | |
                                      |_|
             """)
-        global username
         # ask to enter a username until it is done
         print("Welcome to Minesweeper!\nPlease insert your name")
-        username = input().strip()
-        while len(username) == 0:
+        self.username = input().strip()
+        while len(self.username) == 0:
             print("It looks like you haven't typed anything, please enter your name!")  # noqa
             username = input().strip()
         self.clear_display()
-        print("\nHi " + Fore.GREEN + f"{username}!")
+        print("\nHi " + Fore.GREEN + f"{self.username}!")
 
     def tutorial(self):
         """
@@ -375,7 +373,7 @@ class Game(ClearConsole):
             self.clear_display()
             self.run_game()
         else:
-            print(f"Thank you for playing {username}!")
+            print(f"Thank you for playing {self.username}!")
 
 
 def main():
@@ -397,7 +395,7 @@ def main():
         else:
             game.clear_display()
             print(
-                Fore.RED + f"Hey {username}, your input is not recognized! \n")
+                Fore.RED + f"Hey {game.username}, your input is not recognized! \n")
         if game.gameover or game.victory:
             break
 
