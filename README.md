@@ -7,7 +7,7 @@ Massimo Ranalli
 
 MineSweeper is a single-player puzzle video game. The objective of the game is to clear a square board containing hidden mines or bombs without detonating any of them, with the help from clues about the number of neighbouring mines in each field. The game originates from the 1960s and it has been written for many computing platforms in use today.
 
-![Website Display](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/starting-page.png)
+![Website Display](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/landing-page.png)
 
 ### Flow Chart 
 
@@ -27,7 +27,7 @@ MineSweeper is a single-player puzzle video game. The objective of the game is t
 #### Name Input
 - We collect the username to add a personal touch to the game and have a basic and friendly interaction with him. 
 
-![Name Input]()
+![Name Input](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/insert-name.png)
 
 #### Difficulty Level
 The user can pick between three difficulty levels:
@@ -59,7 +59,7 @@ With the use of ClearDisplay method, the screen updates and there will not be ol
 - While entering coordinates, Row and Columns number not included in the board are signalled, and the user is pushed to insert valid ones
 - General user input error handling is taken cared of and fully tested
 
-![Error Handling]()
+![Error Handling](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/input-handling.png)
 
 #### Game restart
 Whether the game is terminated with a victory or not, the user is offered to play another game or leave. 
