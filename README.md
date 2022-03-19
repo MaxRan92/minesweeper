@@ -9,9 +9,6 @@ MineSweeper is a single-player puzzle video game. The objective of the game is t
 
 ![Website Display](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/landing-page.png)
 
-### Flow Chart 
-
-![FlowChart](https://github.com/MaxRan92/minesweeper/blob/main/docs/flowchart/flowchart.png)
 
 ## How To Play
 - Insert username
@@ -70,6 +67,24 @@ Whether the game is terminated with a victory or not, the user is offered to pla
 With all the limits that a simple command line has, basic but clear UI has been implemented.
 Colors help the user to focus his attention on the actions (keys to press to continue, row/column coordinates to insert etc).
 Moreover, use of ASCII logo and emoji help to improve the aseptic black and white outlook.
+
+## Flow Chart 
+
+![FlowChart](https://github.com/MaxRan92/minesweeper/blob/main/docs/flowchart/flowchart.png)
+
+## Main Methods
+1) **initial_screen()**: Welcome screen with logo and username input
+2) **tutorial()**: Prints the rules of the game
+3) **get_difficulty_level()**: Asks to the user the level of difficulty
+4) **create_new_board()**: Creates a board with random placed mines
+5) **display_board()**: Function to display a properly formatted board
+6) **insert_values()**: In free cells, inserts number of adjacent bombs
+7) **dig_or_flag_selector()**: Asks the user to dig or place a flag
+8) **get_coordinates()**: Allows the user to insert coordinates of the chosen cell
+9) **show()**: Discloses the cell underlying object on the UI board
+10) **get_near_bombs_num()**: Calculates the number of adjacent bombs for a given cell
+11) **run_game()**: Loop that keeps running until the user wins or loses
+12) **restart_game()**: Allows the user to restart the game once he wins or loose
 
 
 
