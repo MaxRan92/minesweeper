@@ -1,6 +1,11 @@
-from colorama import Fore
+"""
+random module -> imported for random number generation for placing bombs
+import os --> needed for the ClearConsole function
+from Colorama import Fore --> to colour the text in the console
+"""
 import random
 import os
+from colorama import Fore
 
 
 # Assigning ASCII icons code to constants
@@ -84,7 +89,8 @@ class Game():
             self.username = input().strip()
         ClearConsole.clear_display()
         # return hello message
-        print("\nHi " + Fore.GREEN + f"{self.username}!" + Fore.WHITE + " Nice to meet you!\n")  # noqa
+        print("\nHi " + Fore.GREEN + f"{self.username}!" +
+        Fore.WHITE + " Nice to meet you!\n")  # noqa
 
     def tutorial(self):
         """
