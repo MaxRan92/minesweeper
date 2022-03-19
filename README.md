@@ -95,7 +95,7 @@ Moreover, use of ASCII logo and emoji help to improve the aseptic black and whit
   About this last alert, I included '  # noqa' on those parts in which shorter than 79 characters lines may lead to bad readibility
 ![Validation Errors](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/pep8.png)
 
-## Manual Testing
+## Manual Testing and Interesting Code Logics
 Manual testing has been implemented in all the phases of the project. Here I summarize and document the most significant issues encountered:
 
 1) **Row/Column input handling**
@@ -108,15 +108,38 @@ Manual testing has been implemented in all the phases of the project. Here I sum
   The main issue was that, if in this second input request the user simply writes a word or just press enter, it would compare a str with "<" and ">" operator conditions (which ensure the number is between the range). And this leads to ValueError and TypeError.
   The issue was solved including a try: except: condition as follows:
 
-            # if number out of board range, enter again,
-            # otherwise we have our x coordinate
-            while x < 0 or x > self.board_size - 1:
-                try:
-                    ClearConsole.clear_display()
-                    self.display_board(self.ui_board)
-                    x = int(input(
-                        Fore.RED + "The row does not exist, please enter a valid "  # noqa
-                        "number\n" + Fore.WHITE)) - 1
-                except (TypeError, ValueError):
-                    continue
+    # if number out of board range, enter again,
+    # otherwise we have our x coordinate
+    while x < 0 or x > self.board_size - 1:
+        try:
+            ClearConsole.clear_display()
+            self.display_board(self.ui_board)
+            x = int(input(
+                Fore.RED + "The row does not exist, please enter a valid "  # noqa
+                "number\n" + Fore.WHITE)) - 1
+        except (TypeError, ValueError):
+            continue
                 
+2) **To loop through the 8 adjacent cell if dug cell is empty**
+  As per flowchart, if a cell with no adjacent mine is dug, a recursive function should enlarge to the neighbouring cells until a close-to-mine cell (hence with a number) is met and shown.
+  Heach loop of the recursive function should loop through all the adjacent cells, and is made via a duble "for" loop which combines left and right cells with up and down ones. 
+  At first the code would break and not enlarge, since the if condition in the last three rows was not inserted: the for loops iterates all the adjacent cells but also the cell dug at first: the second dig would trigger the "already dug cell" alert and stop the code.
+  
+    # loop through the 8 adjacent cells and show all of them
+    # if not already shown before
+    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
+            if (r, c) in self.shown:
+                continue
+            self.show(r, c, flag)
+
+3) **To define a victory**
+  While for losing you just need to dig in the wrong place (quite easy to code), for victory the logic is more interesting.
+  Win comes when all the "safe" cells are dug. This is obtained storing in a set (which hosts unique values) a series of tuple with two numbers representing the coordinates of already dug cells.
+  The set lenght (which corresponds to the number of cells dug) was at first compared to the total number of the cells: if they were equal, means that we uncovered all the cells safely! ... but that is not possible! 
+  The total number of cells contains also those with a mine, hence it is impossible to win digging also them.
+  The solution is in the code below: a while loop that makes you play until the number of shown cells equals the total number of cells of the board, minus the number of bombs.
+  
+    # loop that keeps running until all the cells that do not
+    # contain bombs are shown
+    while len(self.shown) < self.board_size ** 2 - self.bomb_num:
