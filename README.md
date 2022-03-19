@@ -100,38 +100,38 @@ Manual testing has been implemented in all the phases of the project. Here I sum
 
 1) **Row/Column input handling**
   The code below comes from the 8) **get_coordinates()** method. As explained by the comments, the code does the following steps:
-  - takes a row input
-  - If the input is B (back), the code leads to the dir_or_flag_selection method.
-  - If the input is a number, that number should be the row index.
+    - takes a row input
+    - If the input is B (back), the code leads to the dir_or_flag_selection method.
+    - If the input is a number, that number should be the row index.
   
-  When the user inputs a number that is out of the board index range, an alert pops up, asking for a number included between the ranges.
-  The main issue was that, if in this second input request the user simply writes a word or just press enter, it would compare a str with "<" and ">" operator conditions (which ensure the number is between the range). And this leads to ValueError and TypeError.
-  The issue was solved including a try: except: condition as follows:
+    When the user inputs a number that is out of the board index range, an alert pops up, asking for a number included between the ranges.
+    The main issue was that, if in this second input request the user simply writes a word or just press enter, it would compare a str with "<" and ">" operator conditions (which ensure the number is between the range). And this leads to ValueError and TypeError.
+    The issue was solved including a try: except: condition as follows:
 
-    # if number out of board range, enter again,
-    # otherwise we have our x coordinate
-    while x < 0 or x > self.board_size - 1:
-        try:
-            ClearConsole.clear_display()
-            self.display_board(self.ui_board)
-            x = int(input(
-                Fore.RED + "The row does not exist, please enter a valid "  # noqa
-                "number\n" + Fore.WHITE)) - 1
-        except (TypeError, ValueError):
-            continue
+        # if number out of board range, enter again,
+        # otherwise we have our x coordinate
+        while x < 0 or x > self.board_size - 1:
+            try:
+                ClearConsole.clear_display()
+                self.display_board(self.ui_board)
+                x = int(input(
+                    Fore.RED + "The row does not exist, please enter a valid "  # noqa
+                    "number\n" + Fore.WHITE)) - 1
+            except (TypeError, ValueError):
+                continue
                 
 2) **To loop through the 8 adjacent cell if dug cell is empty**
   As per flowchart, if a cell with no adjacent mine is dug, a recursive function should enlarge to the neighbouring cells until a close-to-mine cell (hence with a number) is met and shown.
   Heach loop of the recursive function should loop through all the adjacent cells, and is made via a duble "for" loop which combines left and right cells with up and down ones. 
   At first the code would break and not enlarge, since the if condition in the last three rows was not inserted: the for loops iterates all the adjacent cells but also the cell dug at first: the second dig would trigger the "already dug cell" alert and stop the code.
   
-    # loop through the 8 adjacent cells and show all of them
-    # if not already shown before
-    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
-            if (r, c) in self.shown:
-                continue
-            self.show(r, c, flag)
+        # loop through the 8 adjacent cells and show all of them
+        # if not already shown before
+        for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+            for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
+                if (r, c) in self.shown:
+                    continue
+                self.show(r, c, flag)
 
 3) **To define a victory**
   While for losing you just need to dig in the wrong place (quite easy to code), for victory the logic is more interesting.
@@ -140,6 +140,6 @@ Manual testing has been implemented in all the phases of the project. Here I sum
   The total number of cells contains also those with a mine, hence it is impossible to win digging also them.
   The solution is in the code below: a while loop that makes you play until the number of shown cells equals the total number of cells of the board, minus the number of bombs.
   
-    # loop that keeps running until all the cells that do not
-    # contain bombs are shown
-    while len(self.shown) < self.board_size ** 2 - self.bomb_num:
+        # loop that keeps running until all the cells that do not
+        # contain bombs are shown
+        while len(self.shown) < self.board_size ** 2 - self.bomb_num:
