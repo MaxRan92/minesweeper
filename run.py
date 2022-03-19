@@ -371,6 +371,8 @@ class Game():
             # otherwise we have our x coordinate
             while x < 0 or x > self.board_size - 1:
                 try:
+                    ClearConsole.clear_display()
+                    self.display_board(self.ui_board)
                     x = int(input(
                         Fore.RED + "The row does not exist, please enter a valid "  # noqa
                         "number\n" + Fore.WHITE)) - 1
@@ -400,6 +402,8 @@ class Game():
                 # otherwise we have our y coordinate
                 while y < 0 or y > self.board_size - 1:
                     try:
+                        ClearConsole.clear_display()
+                        self.display_board(self.ui_board)
                         y = int(input(
                             Fore.RED + "The column does not exist, please enter a "  # noqa
                             "valid number\n" + Fore.WHITE)) - 1
