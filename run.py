@@ -43,15 +43,17 @@ class Game(ClearConsole):
         """
         Setting main parameters
         """
+        self.board_size = ""
+        self.bomb_num = ""
         self.ui_board = []
+        self.board_to_show = []
         self.x_coordinates = []
+        self.x_separation = []
         self.shown = set()
         self.gameover = False
         self.victory = False
         self.flag_alert = False
         self.flag = False
-        self.board_size = ""
-        self.bomb_num = ""
 
     def initial_screen(self):
         """"
@@ -76,13 +78,14 @@ class Game(ClearConsole):
         self.username = input().strip()
         while len(self.username) == 0:
             print("It looks like you haven't typed anything, please enter your name!")  # noqa
-            username = input().strip()
+            self.username = input().strip()
         self.clear_display()
+        # return hello message
         print("\nHi " + Fore.GREEN + f"{self.username}!")
 
     def tutorial(self):
         """
-        Tutorial text
+        Prints tutorial text
         """
         # print the rules
         print(
@@ -107,12 +110,14 @@ class Game(ClearConsole):
         Assign board size and bomb num according to
         the difficulty level chosen by the user
         """
+        # asks to insert difficulty level
         difficulty = input(
             "Please select a difficulty level \nh:hard \nm:medium \ne:easy\n")
         while difficulty not in ["e", "easy", "m", "medium", "h", "hard"]:
             difficulty = input(
                 Fore.RED + "Input not recognized\n" + Fore.WHITE).lower()
 
+        # each difficulty level has increasing number of cells and bombs
         if difficulty in ["h", "hard"]:
             self.board_size = 14
             self.bomb_num = 30
@@ -126,9 +131,11 @@ class Game(ClearConsole):
     def create_new_board(self):
         """
         Create board arrays with none values
-        Place bombs, represented by character *,
-        at random coordinates in the board
+        Place bombs, at random coordinates in the board
         """
+        # for loop that creates two boards, inserting for each coordinate:
+        # - None value in the underlying board
+        # - Blank Square Emoji for the User interface board
         board = [[None for a in range(self.board_size)]
                  for b in range(self.board_size)]
         self.ui_board = [[BLANK_SQUARE for a in range(
@@ -150,7 +157,8 @@ class Game(ClearConsole):
 
     def insert_values(self):
         """
-        for each cell that has no bomb, assign a value representing
+        for each cell that has no bomb, callse the get_near_bombs_num()
+        function that assignes a value representing
         the number of bombs in the cells next to it
         """
         for x in range(self.board_size):
@@ -162,12 +170,16 @@ class Game(ClearConsole):
     def get_near_bombs_num(self, x, y):
         """
         iterate through the 8 adiacent cells
+        and count the number of bombs
         """
         near_bombs_num = 0
+        # two for loops to get the coordinates of all adjacent cells
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
+                # do not consider the dug cell
                 if r == x and c == y:
                     continue
+                # if adjacent cell has a bomb, add 1 to the counter
                 if self.board[r][c] == BOMB:
                     near_bombs_num += 1
         return str(near_bombs_num)
@@ -179,6 +191,9 @@ class Game(ClearConsole):
         self.board_to_show = board_to_show
         self.x_coordinates = []
         self.x_separation = []
+        # print yellow x coordinates and separation lines
+        # caring of the spaces taken by double digit coordinates for
+        # better alignment
         for a in range(self.board_size):
             if a < 9:
                 self.x_coordinates.append(
@@ -193,7 +208,9 @@ class Game(ClearConsole):
         self.x_separation = '     ' + self.x_separation
         print(self.x_coordinates)
         print(self.x_separation)
-        # stack board arrays
+        # print stacked board horizontal lines,
+        # obtained appending cyan y coordinates
+        # and spacing properly
         for r in range(self.board_size):
             if r < 9:
                 line_to_print = f"{Fore.CYAN + str(r+1) + Fore.WHITE + '  | ' + '   '.join(self.board_to_show[r]) + '  |  ' + Fore.CYAN + str(r+1) + Fore.WHITE}"  # noqa
@@ -205,34 +222,52 @@ class Game(ClearConsole):
 
     def show(self, x, y, flag):
         """
-        check the cell chosen by the user:
+        check the cell chosen by the user and shows it,
+        enlarging the shown area on certain conditions
         """
+        # if user is not placing/removing a flag
         if not flag:
-            self.shown.add((x, y))
-            # If there is a bomb, game over
-            if self.board[x][y] == BOMB:
-                self.ui_board[x][y] = self.board[x][y]
-                self.gameover = True
-            # If there is one or more adjacent bomb, show only that cell
-            # in the displayed board
-            elif int(self.board[x][y]) > 0:
-                self.ui_board[x][y] = self.board[x][y]
-            # If there is no adjacent bomb, enlarge the shown area until
-            # you find a cell with adjacent bombs
-            elif int(self.board[x][y]) == 0:
-                self.ui_board[x][y] = CLOVER
-                for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
-                    for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
-                        if (r, c) in self.shown:
-                            continue
-                        self.show(r, c, flag)
+            if (x, y) in self.shown:
+                self.display_board(self.ui_board)
+                print(Fore.RED + "\nCell alread dug!" + Fore.WHITE)
+                input("\nPress ENTER to continue")
+                self.get_coordinates(flag)
+            else:
+                # Adds the shown cell as tuple in a set, for record
+                # sets do not allow duplicate value, hence trying to dig
+                # the same cell multiple times won't change it
+                self.shown.add((x, y))
+                # If there is a bomb, show it in the ui board. Game over.
+                if self.board[x][y] == BOMB:
+                    self.ui_board[x][y] = self.board[x][y]
+                    self.gameover = True
+                # If there is one or more adjacent bomb (>0 value in the underlying board), 
+                # show only that cell in the displayed board
+                elif int(self.board[x][y]) > 0:
+                    self.ui_board[x][y] = self.board[x][y]
+                # If there is no adjacent bomb (0 value in the underlying board),
+                # enlarge the shown area until you find a cell with adjacent bombs
+                elif int(self.board[x][y]) == 0:
+                    # place a clover emoji
+                    self.ui_board[x][y] = CLOVER
+                    # loop through the 8 adjacent cells and show all of them
+                    # if not already shown before
+                    for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
+                        for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
+                            if (r, c) in self.shown:
+                                continue
+                            self.show(r, c, flag)
+        # if user is placing/removing a flag, place/remove it 
+        # respectively if in that cell there is a blank_square/flag.
         else:
             if self.ui_board[x][y] == BLANK_SQUARE:
                 self.ui_board[x][y] = FLAG
             elif self.ui_board[x][y] == FLAG:
                 self.ui_board[x][y] = BLANK_SQUARE
             else:
-                print("Cannot place a flag in an already shown spot!")
+                self.display_board(self.ui_board)
+                print(Fore.RED + "\nCannot place a flag in an already shown spot!\n" + Fore.WHITE)
+                input("Press enter to continue")
 
     def run_game(self):
         """
@@ -244,8 +279,9 @@ class Game(ClearConsole):
             if not self.flag_alert:
                 self.display_board(self.ui_board)
             if self.gameover and not self.flag_alert:
-                print("\nOuch, there was a mine!! \n" +
-                      Fore.RED + "Game Over!" + Fore.WHITE)
+                print("\nOuch, there was a mine!! \n\n" +
+                      BOMB + BOMB + Fore.RED + " GAME OVER! " + Fore.WHITE +
+                      BOMB + BOMB)
                 self.restart_game()
                 break
             else:
@@ -254,7 +290,7 @@ class Game(ClearConsole):
                 self.get_coordinates(self.flag)
         if len(self.shown) == self.board_size ** 2 - self.bomb_num:
             self.display_board(self.ui_board)
-            print("\nCONGRATULATIONS! You cleared the field!")
+            print("\n" + CLOVER + CLOVER + "CONGRATULATIONS! You cleared all the field!" + CLOVER + CLOVER)
             self.victory = True
             self.restart_game()
 
@@ -373,7 +409,9 @@ class Game(ClearConsole):
             self.clear_display()
             self.run_game()
         else:
-            print(f"Thank you for playing {self.username}!")
+            self.clear_display()
+            self.display_board(self.ui_board)
+            print(Fore.GREEN + f"\n\nThank you for playing {self.username}!\n\n" + Fore.WHITE)  # noqa
 
 
 def main():
@@ -395,7 +433,7 @@ def main():
         else:
             game.clear_display()
             print(
-                Fore.RED + f"Hey {game.username}, your input is not recognized! \n")
+                Fore.RED + f"Hey {game.username}, your input is not recognized! \n")  # noqa
         if game.gameover or game.victory:
             break
 
