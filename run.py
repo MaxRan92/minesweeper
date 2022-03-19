@@ -150,6 +150,7 @@ class Game():
         # for loop that creates two boards, inserting for each coordinate:
         # - None value in the underlying board
         # - Blank Square Emoji for the User interface board
+        # Code inspired by video tutorial - see README
         board = [[None for a in range(self.board_size)]
                  for b in range(self.board_size)]
         self.ui_board = [[BLANK_SQUARE for a in range(
@@ -379,6 +380,7 @@ class Game():
                     self.ui_board[x][y] = CLOVER
                     # loop through the 8 adjacent cells and show all
                     # of them if not already shown before
+                    # Code inspired by video tutorial - see README
                     for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):  # noqa
                         for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):  # noqa
                             if (r, c) in self.shown:
@@ -404,6 +406,7 @@ class Game():
         """
         near_bombs_num = 0
         # two for loops to get the coordinates of all adjacent cells
+        # Code inspired by video tutorial - see README
         for r in range(max(0, x-1), min(self.board_size-1, x+1)+1):
             for c in range(max(0, y-1), min(self.board_size-1, y+1)+1):
                 # do not consider the dug cell
