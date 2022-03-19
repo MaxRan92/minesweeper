@@ -421,6 +421,8 @@ class Game():
                 if not flag:
                     # If there is a flag, print alert to remove it first
                     if self.ui_board[x][y] == FLAG:
+                        ClearConsole.clear_display()
+                        self.display_board(self.ui_board)
                         print(Fore.RED + "\nPlease remove the flag before digging")  # noqa
                         input("click Enter to continue")
                         self.flag_alert = True
