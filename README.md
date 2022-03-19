@@ -1,7 +1,7 @@
 # MineSweeper
 
 ## Game Link
-The project is developed on Heroku, at the following [Link](https://mine-sweeper-app.herokuapp.com/)
+The project is published on Heroku at the following [Link](https://mine-sweeper-app.herokuapp.com/)
 
 ## Author 
 Massimo Ranalli
@@ -17,7 +17,7 @@ MineSweeper is a single-player puzzle video game. The objective of the game is t
 - Mines are scattered throughout a board, which is divided into cells. Cells have three states: non displayed, displayed and flagged. 
 - A non displayed cell is blank and can be displayed, while an already displayed cell is exposed. 
 - Flagged cells are those marked by the player to indicate a potential mine location.
-- The player select a cell to display it. If a player displays a mined cell, the game ends. Otherwise, the cell displays either a number, indicating the number of mines adjacent to it, or a black tile (represented by a clover), and all adjacent non-mined cells will automatically be uncovered.
+- The player select a cell to display it. If a player displays a mined cell, the game ends. Otherwise, the cell displays either a number, indicating the number of mines adjacent to it, or a black tile (here represented by a clover emoji), and all adjacent non-mined cells will automatically be uncovered.
 The first dig is always safe.
 - The player can also flag a cell, causing a flag to appear on it. Flagged cells are still considered covered, and a player can select them to display them, although they must first be unflagged.
 - To win the game, players must uncover all non-mine cells, at which point, the timer is stopped. Flagging all the mined cells is not required.
@@ -38,12 +38,13 @@ The user can pick between three difficulty levels:
 - Medium: 10x10 board with 15 mines
 - Hard: 14x14 board with 30 mines
 
+These proportions make sure that approximately 15% of the cells contain a mine.
+
 ![Difficulty Level](https://github.com/MaxRan92/minesweeper/blob/main/docs/screenshots/difficulty-level.png)
 
 #### Choice between dig and flag
 
-Just like the original game, the user can decide to dig or flag the chosen cell
-This leads to a series of logical steps to take care of, such as:
+Just like the original game, the user can decide to dig or flag the chosen cell. This leads to a series of logical steps to be cared of, such as:
 - If the user wants to dig(flag) an undisclosed cell, the cell will be dug(flagged)
 - If the user wants to dig or flag an already dug cell, return alert message
 - If the user wants to dig an already flagged cell, return alert proposing to de-flag it first
